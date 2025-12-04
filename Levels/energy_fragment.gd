@@ -34,6 +34,8 @@ func _process(delta):
 			collected = true
 			Global.frags += 1
 			Global.health += 20
+			if Global.health > 100:
+				Global.health = 100
 			print(Global.frags)
 
 func _on_area_entered(area: Area2D):

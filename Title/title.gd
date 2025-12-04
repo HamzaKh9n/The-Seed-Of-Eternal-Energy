@@ -15,5 +15,6 @@ func _on_quit_pressed() -> void:
 	get_tree().quit()
 
 
+
 func _on_play_pressed() -> void:
-	get_tree().change_scene_to_file("res://Emperor's Grave Scenes/graves.tscn")
+	get_tree().change_scene_to_file("res://Levels/level_1.tscn")

@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://ds1cvpmed6s"]
+
+[node name="Pause menu" type="CanvasLayer"]
+process_mode = 3
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_right = 1158.0
+offset_bottom = 652.0
+color = Color(0, 0.032704808, 0, 0.3137255)
+
+[node name="Resume" type="Button" parent="."]
+offset_left = 496.0
+offset_top = 185.0
+offset_right = 566.0
+offset_bottom = 216.0
+scale = Vector2(2.1068878, 2.1068878)
+text = "Resume"
+
+[node name="Save" type="Button" parent="."]
+offset_left = 496.0
+offset_top = 274.0
+offset_right = 566.0
+offset_bottom = 305.0
+scale = Vector2(2.1068878, 2.1068878)
+text = "Save
+"
+
+[node name="Quit" type="Button" parent="."]
+offset_left = 496.0
+offset_top = 362.0
+offset_right = 566.0
+offset_bottom = 393.0
+scale = Vector2(2.1068878, 2.1068878)
+text = "Quit"
+
+[connection signal="pressed" from="Resume" to="." method="_on_resume_pressed"]

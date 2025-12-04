@@ -1,9 +1,10 @@
-[gd_scene load_steps=75 format=3 uid="uid://3kltsx84mnf6"]
+[gd_scene load_steps=80 format=3 uid="uid://3kltsx84mnf6"]
 
 [ext_resource type="Script" uid="uid://bcy87xyegwsqj" path="res://Characters/mc.gd" id="1_8u11n"]
 [ext_resource type="Texture2D" uid="uid://yurofwp74cre" path="res://Characters/Fighter/Attack_1.png" id="2_y5546"]
 [ext_resource type="Texture2D" uid="uid://cg1u6ijpqpgnx" path="res://Characters/Fighter/Attack_2.png" id="3_a43su"]
 [ext_resource type="Texture2D" uid="uid://ct5nyf1kv2myo" path="res://Characters/Fighter/Attack_3.png" id="4_q3l62"]
+[ext_resource type="Texture2D" uid="uid://d1d76p3hgi1wf" path="res://Characters/Fighter/Dead.png" id="5_a43su"]
 [ext_resource type="Texture2D" uid="uid://b6syoiru2ee11" path="res://Characters/Fighter/Hurt.png" id="5_d6vu0"]
 [ext_resource type="Texture2D" uid="uid://dia343ti3him6" path="res://Characters/Fighter/Idle.png" id="6_nvv4o"]
 [ext_resource type="Texture2D" uid="uid://ckyo47x6ws5yn" path="res://Characters/Fighter/Jump.png" id="7_obwgg"]
@@ -55,6 +56,18 @@ region = Rect2(256, 0, 128, 128)
 [sub_resource type="AtlasTexture" id="AtlasTexture_tum2c"]
 atlas = ExtResource("4_q3l62")
 region = Rect2(384, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q3l62"]
+atlas = ExtResource("5_a43su")
+region = Rect2(0, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_su02d"]
+atlas = ExtResource("5_a43su")
+region = Rect2(128, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2exg1"]
+atlas = ExtResource("5_a43su")
+region = Rect2(256, 0, 128, 128)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pwqhw"]
 atlas = ExtResource("5_d6vu0")
@@ -253,6 +266,20 @@ animations = [{
 "loop": false,
 "name": &"Attack 3",
 "speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q3l62")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_su02d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2exg1")
+}],
+"loop": false,
+"name": &"Death",
+"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -674,11 +701,40 @@ tracks/1/keys = {
 "values": [0, 1, 2, 3, 4, 5, 6, 7]
 }
 
+[sub_resource type="Animation" id="Animation_u8cqd"]
+resource_name = "Death"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"Death"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.10207308, 0.20124215),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [0, 1, 2]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_u8cqd"]
 _data = {
 &"Attack 1": SubResource("Animation_nvv4o"),
 &"Attack 2": SubResource("Animation_obwgg"),
 &"Attack 3": SubResource("Animation_an5s5"),
+&"Death": SubResource("Animation_u8cqd"),
 &"Fall": SubResource("Animation_q3l62"),
 &"Hurt": SubResource("Animation_ywwbt"),
 &"Idle": SubResource("Animation_su02d"),
@@ -708,7 +764,7 @@ script = ExtResource("1_8u11n")
 position = Vector2(-3, 0)
 scale = Vector2(0.9372605, 0.94820493)
 sprite_frames = SubResource("SpriteFrames_surwc")
-animation = &"Attack 1"
+animation = &"Death"
 autoplay = "Idle"
 frame = 1
 offset = Vector2(4, 0)
