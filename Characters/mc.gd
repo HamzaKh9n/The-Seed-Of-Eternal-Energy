@@ -6,12 +6,12 @@ extends CharacterBody2D
 @export var move_speed := 600.0
 @export var acceleration := 30.0
 @export var deceleration := 25.0
-@export var jump_force := -1300.0
+@export var jump_force := -900.0
 @export var gravity := 3000.0
 
 # Hollow Knight variable jump (FIXED)
-@export var low_gravity := 2000.0   ### FIXED (was too low)
-@export var high_gravity := 1500.0 ### FIXED (better cutoff)
+@export var low_gravity := 1000.0   ### FIXED (was too low)
+@export var high_gravity := 3000.0 ### FIXED (better cutoff)
 
 @onready var cam = $Camera2D
 @onready var anim = $AnimationPlayer
@@ -25,7 +25,6 @@ var was_on_floor := false
 var attack = false
 var cooldown = false
 var combo = 0
-var nothing = false
 
 var is_hurt: bool = false
 var hurt_duration: float = 0.25
@@ -41,7 +40,6 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-
 	if Global.health <= 0:
 		anim.play("Death")
 		var tree = get_tree()
@@ -56,6 +54,9 @@ func _physics_process(delta: float) -> void:
 			1:
 				await tree.process_frame
 				tree.change_scene_to_file("res://Levels/level_1.tscn")
+			2:
+				await tree.process_frame
+				tree.change_scene_to_file("res://Levels/level_2.tscn")
 
 			3:
 				await tree.process_frame
@@ -63,7 +64,6 @@ func _physics_process(delta: float) -> void:
 	# -----------------------------------------------------
 	# Handle Hurt State First
 	# -----------------------------------------------------
-	
 	if is_hurt:
 		hurt_timer -= delta
 		# soft stop
@@ -72,9 +72,7 @@ func _physics_process(delta: float) -> void:
 
 		if hurt_timer <= 0:
 			is_hurt = false
-		
 		move_and_slide()
-		was_on_floor = is_on_floor()
 		return
 
 
@@ -202,7 +200,7 @@ func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 
 	if anim_name.begins_with("Attack"):  ### FIXED
 		attack = false
-		move_speed = 350
+		move_speed = 600
 		Do_attack()
 		
 
@@ -221,7 +219,8 @@ func Do_attack():
 			velocity.x = -dir_to_enemy * knock_force
 
 			shake_camera(0.25, 18)
-			await pause_brief(0.02, 0.06)
+			await pause_brief(0.05, 0.25)
+
 
 		
 
@@ -243,30 +242,30 @@ func _on_combo_cooldown_timeout() -> void:
 func take_damage(amount, dir, power) -> void:
 	if can_hurt:
 		Global.health -= amount
-		if Global.health > 0:
-			var knock_dir := signi(dir)
-			if knock_dir == 0:
-				knock_dir = 1
 
-			is_hurt = true
-			hurt_timer = hurt_duration
+		var knock_dir := signi(dir)
+		if knock_dir == 0:
+			knock_dir = 1
 
-			# --- FIX 1: Clamp power so it NEVER becomes crazy ---
-			var k_power := clampf(power, 200, 800)
+		is_hurt = true
+		hurt_timer = hurt_duration
 
-			# --- FIX 2: Apply strong knockback instantly (frame perfect) ---
-			velocity = Vector2(knock_dir * k_power, -k_power * 0.15)
+		# --- FIX 1: Clamp power so it NEVER becomes crazy ---
+		var k_power := clampf(power, 200, 800)
 
-			anim.play("Hurt")
-			shake_camera(0.25, 18)
+		# --- FIX 2: Apply strong knockback instantly (frame perfect) ---
+		velocity = Vector2(knock_dir * k_power, -k_power * 0.15)
 
-			# --- FIX 3: Small freeze frame for impact ---
-			await pause_brief(0.15, 0.1)
+		anim.play("Hurt")
+		shake_camera(0.25, 18)
 
-			# --- FIX 4: DO NOT cancel velocity here ---
-			# Do NOT reset velocity.x = 0  (this kills knockback)
-			can_hurt = false
-			start_invincibility()
+		# --- FIX 3: Small freeze frame for impact ---
+		await pause_brief(0.15, 0.1)
+
+		# --- FIX 4: DO NOT cancel velocity here ---
+		# Do NOT reset velocity.x = 0  (this kills knockback)
+		can_hurt = false
+		start_invincibility()
 
 
 
@@ -291,21 +290,21 @@ var _is_time_scaled := false
 
 
 func pause_brief(duration: float, slow: float = 0.1) -> void:
+	# Prevent overlapping slow-mo
 	if _is_time_scaled:
 		return
+	
 	_is_time_scaled = true
 
-	var original_time := Engine.time_scale
+	var original := Engine.time_scale
 	Engine.time_scale = slow
 
-	var start_ms := Time.get_ticks_msec()
-	var target_ms := start_ms + int(duration * 1000.0)
+	# Use a timer that does NOT depend on time_scale
+	await get_tree().create_timer(duration, false, true).timeout
 
-	while Time.get_ticks_msec() < target_ms:
-		await get_tree().process_frame
-
-	Engine.time_scale = original_time
+	Engine.time_scale = original
 	_is_time_scaled = false
+
 
 
 # -----------------------------------------------------
