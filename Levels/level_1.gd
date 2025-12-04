@@ -4,6 +4,7 @@ extends Node2D
 var paused := false
 
 func _ready() -> void:
+	Engine.time_scale = 1.2
 	Global.Level = 1
 	Global.max_frags = 10
 	Global.frags = 10
