@@ -25,6 +25,7 @@ var was_on_floor := false
 var attack = false
 var cooldown = false
 var combo = 0
+var nothing = false
 
 var is_hurt: bool = false
 var hurt_duration: float = 0.25
