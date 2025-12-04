@@ -1,1 +1,30 @@
 extends Node2D
+
+
+var paused := false
+
+func _ready() -> void:
+	Global.Level = 3
+
+
+func _input(event):
+	if event.is_action_pressed("ui_cancel"):
+		toggle_pause()
+
+func toggle_pause():
+	paused = !paused
+	get_tree().paused = paused
+
+	$"Pause menu".visible = paused
+
+
+	
+func _on_resume_pressed() -> void:
+	print("resume")
+	toggle_pause()
+
+
+#
+func _on_quit_pressed() -> void:
+	toggle_pause()
+	get_tree().change_scene_to_file("res://Title/title.tscn")

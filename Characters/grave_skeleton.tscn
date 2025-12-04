@@ -578,8 +578,8 @@ size = Vector2(64, 437)
 radius = 690.2188
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_0o5mu"]
-radius = 43.0
-height = 122.0
+radius = 15.0
+height = 84.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0y5xv"]
 size = Vector2(182, 119)
@@ -599,7 +599,7 @@ energy_fragment_scene = ExtResource("2_0o5mu")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(1.4716464, 1.4716464)
 sprite_frames = SubResource("SpriteFrames_qf88e")
-animation = &"Spawn"
+animation = &"Walk"
 autoplay = "Nothing"
 frame = 1
 

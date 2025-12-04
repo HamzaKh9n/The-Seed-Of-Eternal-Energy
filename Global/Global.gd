@@ -4,6 +4,9 @@ var max_health = 100
 var health = 100
 var frags = 0
 var Power = 25
+var Level = 1
+var max_frags = 10
+
 
 func _input(event):
 	if event is InputEventKey and event.pressed and event.keycode == KEY_F11:

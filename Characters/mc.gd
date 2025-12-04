@@ -41,9 +41,28 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 
+	if Global.health <= 0:
+		anim.play("Death")
+		var tree = get_tree()
+		await anim.animation_finished
+		Global.health = 100
+		Global.frags -= 10
+		if Global.frags <= 0:
+			Global.frags = 0
+		var level = Global.Level
+		print(level)
+		match level:
+			1:
+				await tree.process_frame
+				tree.change_scene_to_file("res://Levels/level_1.tscn")
+
+			3:
+				await tree.process_frame
+				tree.change_scene_to_file("res://Emperor's Grave Scenes/graves.tscn")
 	# -----------------------------------------------------
 	# Handle Hurt State First
 	# -----------------------------------------------------
+	
 	if is_hurt:
 		hurt_timer -= delta
 		# soft stop
@@ -82,7 +101,7 @@ func _physics_process(delta: float) -> void:
 				anim.play("Run")
 		else:
 			velocity.x = lerp(velocity.x, 0.0, deceleration * delta)
-			if is_on_floor() and anim.current_animation not in ["Land", "Jump"]:
+			if is_on_floor() and anim.current_animation not in ["Land", "Jump" , "Death"]:
 				anim.play("Idle")
 
 
@@ -223,30 +242,30 @@ func _on_combo_cooldown_timeout() -> void:
 func take_damage(amount, dir, power) -> void:
 	if can_hurt:
 		Global.health -= amount
+		if Global.health > 0:
+			var knock_dir := signi(dir)
+			if knock_dir == 0:
+				knock_dir = 1
 
-		var knock_dir := signi(dir)
-		if knock_dir == 0:
-			knock_dir = 1
+			is_hurt = true
+			hurt_timer = hurt_duration
 
-		is_hurt = true
-		hurt_timer = hurt_duration
+			# --- FIX 1: Clamp power so it NEVER becomes crazy ---
+			var k_power := clampf(power, 200, 800)
 
-		# --- FIX 1: Clamp power so it NEVER becomes crazy ---
-		var k_power := clampf(power, 200, 800)
+			# --- FIX 2: Apply strong knockback instantly (frame perfect) ---
+			velocity = Vector2(knock_dir * k_power, -k_power * 0.15)
 
-		# --- FIX 2: Apply strong knockback instantly (frame perfect) ---
-		velocity = Vector2(knock_dir * k_power, -k_power * 0.15)
+			anim.play("Hurt")
+			shake_camera(0.25, 18)
 
-		anim.play("Hurt")
-		shake_camera(0.25, 18)
+			# --- FIX 3: Small freeze frame for impact ---
+			await pause_brief(0.15, 0.1)
 
-		# --- FIX 3: Small freeze frame for impact ---
-		await pause_brief(0.15, 0.1)
-
-		# --- FIX 4: DO NOT cancel velocity here ---
-		# Do NOT reset velocity.x = 0  (this kills knockback)
-		can_hurt = false
-		start_invincibility()
+			# --- FIX 4: DO NOT cancel velocity here ---
+			# Do NOT reset velocity.x = 0  (this kills knockback)
+			can_hurt = false
+			start_invincibility()
 
 
 

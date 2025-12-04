@@ -88,6 +88,9 @@ func _physics_process(delta: float) -> void:
 				if can_attack and anim.current_animation not in ['Damage' , 'Death']:
 					anim.play('Attack')
 		
+		for area in hitbox_area.get_overlapping_areas():
+			if area.is_in_group("PlayerHitbox"):
+				area.get_parent().take_damage(10 , area.get_parent().global_position.x - global_position.x , 1500)
 	else:
 		velocity = Vector2.ZERO
 		if alive and anim.current_animation not in ['Attack', 'Spawn' , 'Damage' , 'Death']:

@@ -9,11 +9,24 @@
 script = ExtResource("1_yxh4k")
 
 [node name="TextureProgressBar" type="TextureProgressBar" parent="."]
+modulate = Color(1, 0, 0, 1)
 offset_left = 2.0
 offset_top = 6.0
 offset_right = 1026.0
 offset_bottom = 329.0
 scale = Vector2(0.13602088, 0.13602088)
+value = 100.0
+texture_under = ExtResource("2_3hya5")
+texture_over = ExtResource("3_3hya5")
+texture_progress = ExtResource("3_yxh4k")
+texture_progress_offset = Vector2(0, 21)
+
+[node name="TextureProgressBar2" type="TextureProgressBar" parent="."]
+offset_left = 11.0
+offset_top = 42.0
+offset_right = 1035.0
+offset_bottom = 365.0
+scale = Vector2(0.12010475, 0.08191971)
 value = 100.0
 texture_under = ExtResource("2_3hya5")
 texture_over = ExtResource("3_3hya5")

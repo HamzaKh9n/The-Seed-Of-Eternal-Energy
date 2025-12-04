@@ -1,0 +1,43 @@
+[gd_scene load_steps=4 format=3 uid="uid://b1d4pqdsqnn84"]
+
+[ext_resource type="FontFile" uid="uid://dg0l3r1js8t3e" path="res://Global/Poppins/Poppins-Medium.ttf" id="1_586pb"]
+[ext_resource type="Script" uid="uid://dv1l8rpyfmumt" path="res://Global/dialog_box.gd" id="1_gnfpf"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0imre"]
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[node name="DialogBox" type="CanvasLayer" groups=["DialogBox"]]
+script = ExtResource("1_gnfpf")
+
+[node name="Panel" type="Panel" parent="."]
+modulate = Color(1, 0.8745098, 0.74509805, 1)
+offset_left = 165.0
+offset_top = 27.0
+offset_right = 205.0
+offset_bottom = 67.0
+scale = Vector2(21.147968, 6.100163)
+theme_override_styles/panel = SubResource("StyleBoxFlat_0imre")
+
+[node name="Label" type="Label" parent="Panel"]
+layout_mode = 0
+offset_left = 4.8231587
+offset_top = 7.540782
+offset_right = 44.82316
+offset_bottom = 43.540783
+scale = Vector2(0.75635535, 0.67792594)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("1_586pb")
+theme_override_font_sizes/font_size = 3
+text = "blah blah"
+autowrap_mode = 3
+
+[node name="Timer" type="Timer" parent="Panel"]
+wait_time = 0.030000000000000002
