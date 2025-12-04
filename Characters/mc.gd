@@ -6,12 +6,12 @@ extends CharacterBody2D
 @export var move_speed := 600.0
 @export var acceleration := 30.0
 @export var deceleration := 25.0
-@export var jump_force := -900.0
+@export var jump_force := -1300.0
 @export var gravity := 3000.0
 
 # Hollow Knight variable jump (FIXED)
-@export var low_gravity := 1000.0   ### FIXED (was too low)
-@export var high_gravity := 3000.0 ### FIXED (better cutoff)
+@export var low_gravity := 2000.0   ### FIXED (was too low)
+@export var high_gravity := 1500.0 ### FIXED (better cutoff)
 
 @onready var cam = $Camera2D
 @onready var anim = $AnimationPlayer
