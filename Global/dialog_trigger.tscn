@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://cs3sdxtqdqpq2"]
+
+[ext_resource type="Script" uid="uid://bjtlxx266uoau" path="res://Global/dialog_trigger.gd" id="1_aye8a"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_buuks"]
+size = Vector2(20, 375)
+
+[node name="DialogTrigger" type="Area2D"]
+script = ExtResource("1_aye8a")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 177.5)
+shape = SubResource("RectangleShape2D_buuks")
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]

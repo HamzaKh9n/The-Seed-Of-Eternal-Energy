@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://ccgx5bhrlkv8h"]
+[gd_scene load_steps=15 format=3 uid="uid://ccgx5bhrlkv8h"]
 
 [ext_resource type="Texture2D" uid="uid://iy8bi3npn5qo" path="res://Levels/Tiles.png" id="1_n0qsc"]
 [ext_resource type="Script" uid="uid://dn74l7cj138af" path="res://Levels/level_1.gd" id="1_rfktq"]
@@ -8,6 +8,8 @@
 [ext_resource type="PackedScene" uid="uid://dvk5ws487bo4j" path="res://Characters/grave_skeleton.tscn" id="5_syshm"]
 [ext_resource type="PackedScene" uid="uid://dkifncno0kis1" path="res://Global/HealthBar.tscn" id="7_0urlm"]
 [ext_resource type="PackedScene" uid="uid://cq74cj83psrv8" path="res://Levels/energy_fragment.tscn" id="8_77x7w"]
+[ext_resource type="PackedScene" uid="uid://b1d4pqdsqnn84" path="res://Global/dialog_box.tscn" id="9_xoyoh"]
+[ext_resource type="PackedScene" uid="uid://cs3sdxtqdqpq2" path="res://Global/dialog_trigger.tscn" id="10_f4pg2"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_77x7w"]
 texture = ExtResource("1_n0qsc")
@@ -573,7 +575,7 @@ shape = SubResource("CircleShape2D_rf6l5")
 [node name="HealthBar" parent="." instance=ExtResource("7_0urlm")]
 
 [node name="EnergyFragment" parent="." instance=ExtResource("8_77x7w")]
-position = Vector2(916, 465)
+position = Vector2(1185, 465)
 scale = Vector2(1.7075473, 1.7075473)
 
 [node name="EnergyFragment2" parent="." instance=ExtResource("8_77x7w")]
@@ -685,6 +687,14 @@ offset_bottom = 393.0
 scale = Vector2(2.1068878, 2.1068878)
 text = "Quit"
 
+[node name="DialogBox" parent="." instance=ExtResource("9_xoyoh")]
+
+[node name="DialogTrigger1" parent="." instance=ExtResource("10_f4pg2")]
+position = Vector2(908.99994, -339.00003)
+scale = Vector2(9.36337, 3.4118855)
+dialog = "These are Energy Fragments\\nCollect 10 of them to Become Capable of going in Forgotten Dome"
+
 [connection signal="area_entered" from="S1" to="." method="_on_s_1_area_entered"]
+[connection signal="area_entered" from="TP" to="." method="_on_tp_area_entered"]
 [connection signal="pressed" from="Pause menu/Resume" to="." method="_on_resume_pressed"]
 [connection signal="pressed" from="Pause menu/Quit" to="." method="_on_quit_pressed"]

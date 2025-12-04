@@ -5,6 +5,8 @@ var paused := false
 
 func _ready() -> void:
 	Global.Level = 1
+	Global.max_frags = 10
+	Global.frags = 10
 
 
 func _input(event):
@@ -28,3 +30,11 @@ func _on_resume_pressed() -> void:
 func _on_quit_pressed() -> void:
 	toggle_pause()
 	get_tree().change_scene_to_file("res://Title/title.tscn")
+
+
+func _on_tp_area_entered(area: Area2D) -> void:
+	if area.is_in_group('PlayerHitbox'):
+		if Global.frags >= 10:
+			get_tree().change_scene_to_file("res://Levels/level_2.tscn")
+		else:
+			print("Not Enough Frags")

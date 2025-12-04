@@ -516,6 +516,34 @@ tracks/1/keys = {
 "values": [0, 1, 2, 3]
 }
 
+[sub_resource type="Animation" id="Animation_u8cqd"]
+resource_name = "Death"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"Death"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.10207308, 0.20124215),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [0, 1, 2]
+}
+
 [sub_resource type="Animation" id="Animation_q3l62"]
 resource_name = "Fall"
 length = 0.1
@@ -701,34 +729,6 @@ tracks/1/keys = {
 "values": [0, 1, 2, 3, 4, 5, 6, 7]
 }
 
-[sub_resource type="Animation" id="Animation_u8cqd"]
-resource_name = "Death"
-length = 0.4
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("AnimatedSprite2D:animation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [&"Death"]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("AnimatedSprite2D:frame")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.10207308, 0.20124215),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 1,
-"values": [0, 1, 2]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_u8cqd"]
 _data = {
 &"Attack 1": SubResource("Animation_nvv4o"),
@@ -748,11 +748,12 @@ _data = {
 size = Vector2(0.7068386, 79.11276)
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_y5546"]
-height = 70.0
+radius = 9.0
+height = 46.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_a43su"]
-radius = 30.0
-height = 60.0
+radius = 73.93945
+height = 284.38248
 
 [node name="MC" type="CharacterBody2D"]
 visibility_layer = 2
@@ -764,7 +765,7 @@ script = ExtResource("1_8u11n")
 position = Vector2(-3, 0)
 scale = Vector2(0.9372605, 0.94820493)
 sprite_frames = SubResource("SpriteFrames_surwc")
-animation = &"Death"
+animation = &"Idle"
 autoplay = "Idle"
 frame = 1
 offset = Vector2(4, 0)
@@ -794,14 +795,15 @@ volume_db = 3.029
 [node name="Hitbox" type="Area2D" parent="." groups=["Entity", "PlayerHitbox"]]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
-position = Vector2(-1, 23)
+position = Vector2(-1, 26)
 shape = SubResource("CapsuleShape2D_y5546")
 
 [node name="AttackRadius" type="Area2D" parent="."]
 position = Vector2(0, 17)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackRadius"]
-position = Vector2(22, -6)
+position = Vector2(29, 1)
+scale = Vector2(0.54232925, 0.17581955)
 shape = SubResource("CapsuleShape2D_a43su")
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
