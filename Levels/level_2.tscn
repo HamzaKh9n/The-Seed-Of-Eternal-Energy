@@ -10,7 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://cq74cj83psrv8" path="res://Levels/energy_fragment.tscn" id="8_5yfph"]
 [ext_resource type="PackedScene" uid="uid://btjcua0a03rqx" path="res://Global/dialog_box.tscn" id="9_vltsr"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_w6yvm"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vltsr"]
 texture = ExtResource("2_vltsr")
 2:1/0 = 0
 3:1/0 = 0
@@ -444,7 +444,7 @@ texture = ExtResource("2_vltsr")
 [sub_resource type="TileSet" id="TileSet_jcvcn"]
 physics_layer_0/collision_layer = 15
 physics_layer_0/collision_mask = 15
-sources/0 = SubResource("TileSetAtlasSource_w6yvm")
+sources/0 = SubResource("TileSetAtlasSource_vltsr")
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_rf6l5"]
 radius = 330.06818
