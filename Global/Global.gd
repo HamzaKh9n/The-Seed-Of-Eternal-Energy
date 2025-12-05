@@ -8,6 +8,7 @@ var Level = 1
 var max_frags = 10
 var stop = false
 var encounters = 0
+var dialog_count: int = 0
 
 
 func _input(event):

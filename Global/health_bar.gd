@@ -8,7 +8,7 @@ func _ready() -> void:
 	$TextureProgressBar2.value = 0
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	$TextureProgressBar.value = Global.health
 	$TextureProgressBar2.value = Global.frags
 	

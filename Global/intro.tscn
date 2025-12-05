@@ -1,0 +1,211 @@
+[gd_scene load_steps=4 format=3 uid="uid://bdbrdx1wm88xt"]
+
+[ext_resource type="FontFile" uid="uid://ws62klh1aula" path="res://Global/RasterForgeRegular-JpBgm.ttf" id="1_l744n"]
+[ext_resource type="Script" uid="uid://dte6txogh1k1o" path="res://Global/intro.gd" id="1_yw8nk"]
+[ext_resource type="AudioStream" uid="uid://dgxhl82el2081" path="res://Global/15. Resting Grounds.mp3" id="3_rnmrj"]
+
+[node name="Intro" type="Node2D"]
+script = ExtResource("1_yw8nk")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 650.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+color = Color(0, 0, 0, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -681.0
+offset_top = -81.000015
+offset_right = 519.0
+offset_bottom = 203.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.1056124, 1.4971691)
+
+[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer/VBoxContainer"]
+clip_contents = false
+custom_minimum_size = Vector2(1200, 20)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("1_l744n")
+bbcode_enabled = true
+text = "Our world once thrived… until we drowned it in smoke.
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="CanvasLayer/VBoxContainer"]
+custom_minimum_size = Vector2(500, 20)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("1_l744n")
+bbcode_enabled = true
+text = "For centuries, humanity fed on coal, petrol, and diesel—poisoning the sky with every breath."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RichTextLabel3" type="RichTextLabel" parent="CanvasLayer/VBoxContainer"]
+custom_minimum_size = Vector2(500, 20)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("1_l744n")
+bbcode_enabled = true
+text = "Oceans darkened. Forests collapsed. The air itself turned against us."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RichTextLabel4" type="RichTextLabel" parent="CanvasLayer/VBoxContainer"]
+custom_minimum_size = Vector2(500, 20)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("1_l744n")
+bbcode_enabled = true
+text = "In desperation, the world searched for a new source of hope… a pure, eternal energy."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -648.0
+offset_top = -81.0
+offset_right = 552.0
+offset_bottom = 203.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.078002, 1.4597803)
+
+[node name="RichTextLabel5" type="RichTextLabel" parent="CanvasLayer/VBoxContainer2"]
+custom_minimum_size = Vector2(500, 20)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("1_l744n")
+bbcode_enabled = true
+text = "Legends spoke of a distant realm—‘Hope World’—where the Seed of Eternal Energy sleeps.
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RichTextLabel6" type="RichTextLabel" parent="CanvasLayer/VBoxContainer2"]
+custom_minimum_size = Vector2(500, 20)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("1_l744n")
+bbcode_enabled = true
+text = "A power strong enough to heal the planet… or destroy it.
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RichTextLabel7" type="RichTextLabel" parent="CanvasLayer/VBoxContainer2"]
+custom_minimum_size = Vector2(500, 20)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("1_l744n")
+bbcode_enabled = true
+text = "But Hope World is no paradise.
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RichTextLabel8" type="RichTextLabel" parent="CanvasLayer/VBoxContainer2"]
+custom_minimum_size = Vector2(500, 20)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("1_l744n")
+bbcode_enabled = true
+text = "Every path is a trial. Every step, a danger. And every seeker who dared to enter… never returned.
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxContainer3" type="VBoxContainer" parent="CanvasLayer"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -700.0
+offset_top = -81.000015
+offset_right = 500.0
+offset_bottom = 203.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.1768047, 1.5935743)
+
+[node name="RichTextLabel9" type="RichTextLabel" parent="CanvasLayer/VBoxContainer3"]
+custom_minimum_size = Vector2(500, 20)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("1_l744n")
+bbcode_enabled = true
+text = "Now, in humanity’s final hour… one traveler rises.
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RichTextLabel10" type="RichTextLabel" parent="CanvasLayer/VBoxContainer3"]
+custom_minimum_size = Vector2(500, 20)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("1_l744n")
+bbcode_enabled = true
+text = "Driven not by fame, nor reward… but by the last spark of courage left in this dying world.
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RichTextLabel11" type="RichTextLabel" parent="CanvasLayer/VBoxContainer3"]
+custom_minimum_size = Vector2(500, 20)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("1_l744n")
+bbcode_enabled = true
+text = "Your journey begins at the edge of despair…
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RichTextLabel12" type="RichTextLabel" parent="CanvasLayer/VBoxContainer3"]
+custom_minimum_size = Vector2(500, 20)
+layout_mode = 2
+theme_override_fonts/normal_font = ExtResource("1_l744n")
+bbcode_enabled = true
+text = "…and ends where hope is reborn.
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="CanvasLayer"]
+amount = 20
+lifetime = 6.0
+randomness = 1.0
+direction = Vector2(1, 1)
+gravity = Vector2(0, 0)
+initial_velocity_min = 95.0
+initial_velocity_max = 113.0
+scale_amount_min = 4.0
+scale_amount_max = 4.0
+
+[node name="CPUParticles2D2" type="CPUParticles2D" parent="CanvasLayer"]
+position = Vector2(1152, 0)
+amount = 20
+lifetime = 8.0
+randomness = 1.0
+direction = Vector2(-1, 1)
+gravity = Vector2(0, 0)
+initial_velocity_min = 93.0
+initial_velocity_max = 113.0
+scale_amount_min = 4.0
+scale_amount_max = 4.0
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_rnmrj")
+volume_db = 10.874
+
+[node name="Start" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="timeout" from="Start" to="." method="_on_start_timeout"]

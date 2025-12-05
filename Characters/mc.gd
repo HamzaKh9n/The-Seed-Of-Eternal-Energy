@@ -43,6 +43,8 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if Global.stop:
 		anim.play('Idle')
+		if not is_on_floor():
+			velocity.y = gravity * delta
 		return
 		
 	if Global.health <= 0:
@@ -165,25 +167,16 @@ func _physics_process(delta: float) -> void:
 		# freeze movement
 		velocity.x = 0
 
-		var push = 0
 
 		match combo:
 			0:
 				anim.play("Attack 1")
-				push = 200
 			1:
 				anim.play("Attack 2")
-				push = 200
 			2:
 				anim.play("Attack 3")
-				push = 300
 
 		# apply push direction
-		if sprite.flip_h:
-			push = -push
-
-		if is_on_floor():
-			velocity.x += push
 
 		combo += 1
 		if combo > 2:

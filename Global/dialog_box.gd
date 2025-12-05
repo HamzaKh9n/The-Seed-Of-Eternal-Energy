@@ -3,63 +3,92 @@ extends CanvasLayer
 @onready var label: RichTextLabel = $HBoxContainer/VBoxContainer/RichTextLabel
 @onready var type_sound: AudioStreamPlayer2D = $AudioStreamPlayer2D
 
-var full_text := ""
-var current_text := ""
-var typing := false
-var char_speed := 0.02  # time between letters
-var dialog_open = false
+var char_speed: float = 0.02
+
+var _queue: Array = []
+var _running := false
+var _skip := false
+var _typing := false
+
+# ----------------------------------------------------
+# PUBLIC: Call this from anywhere
+# Example: await $DialogBox.enqueue("Hello there!")
+# ----------------------------------------------------
+func enqueue(text: String) -> void:
+	_queue.append(text)
+	if not _running:
+		_process_queue()
+
+# ----------------------------------------------------
+# PROCESS QUEUE (async)
+# ----------------------------------------------------
+func _process_queue() -> void:
+	_running = true
+
+	while _queue.size() > 0:
+		var next_text = _queue.pop_front()
+
+		# Start dialog state
+		Global.dialog_count += 1
+		Global.stop = true   # ALWAYS freeze when any dialog is running
+
+		await _show_and_type(next_text)
+
+		# End dialog state
+		Global.dialog_count = max(Global.dialog_count - 1, 0)
+		Global.stop = Global.dialog_count > 0
+
+	_running = false
 
 
-func show_dialog(text_to_show: String) -> void:
-	await wait_until_dialog_free()
-	get_tree().get_first_node_in_group("player").anim.play("Idle")
-	if get_tree().get_first_node_in_group("player").anim.current_animation == "Idle":
-		get_tree().paused = true
-		full_text = text_to_show
-		current_text = ""
-		typing = true
-		dialog_open = true
-	
+# ----------------------------------------------------
+# SHOW + TYPE COROUTINE
+# ----------------------------------------------------
+func _show_and_type(text: String) -> void:
+	visible = true
+	_skip = false
+	_typing = true
 
-		label.bbcode_enabled = true
-		label.text = ""              # start empty
-		visible = true               # show dialog UI
+	label.clear()
+	label.bbcode_enabled = true
+	label.bbcode_text = text
+	label.visible_characters = 0.0
 
-		type_text()                 # start typing coroutine
+	var total := label.get_total_character_count()
+	var current := 0
 
+	while current < total:
+		if _skip:
+			break
 
-func type_text() -> void:
-	for i in full_text.length():
-		if not typing:
-			break   # instantly skip to full text
+		current += 1
+		label.visible_characters = current
 
-		current_text += full_text[i]
-		label.text = current_text
-
-		if not type_sound.playing:
+		if type_sound and not type_sound.playing:
 			type_sound.play()
 
 		await get_tree().create_timer(char_speed).timeout
 
-	# finish
-	label.text = full_text
-	typing = false
+	# Finish instantly
+	label.visible_characters = -1 
+	_typing = false
 
-
-# Skip text on SPACE
-func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_accept"):  # SPACE or ENTER
-		if typing:
-			typing = false   # stops the coroutine, text finishes instantly
-		else:
-			hide_dialog()    # close when finished
-			
-
-func wait_until_dialog_free() -> void:
-	while dialog_open:
+	# Wait for SPACE to close
+	while not _skip:
 		await get_tree().process_frame
 
-func hide_dialog() -> void:
-	get_tree().paused = false
-	dialog_open = false
+	# Close dialog
 	visible = false
+	_skip = false
+	return
+
+
+# ----------------------------------------------------
+# INPUT: Skip OR Close
+# ----------------------------------------------------
+func _unhandled_input(event: InputEvent) -> void:
+	if not visible:
+		return
+
+	if event.is_action_pressed("ui_accept"):
+		_skip = true    # Skip OR close

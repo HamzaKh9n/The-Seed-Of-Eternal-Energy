@@ -4,10 +4,10 @@ extends CharacterBody2D
 #       EXPORT VARIABLES
 # -----------------------------
 @export var speed: float = 300
-@export var attack_cooldown: float = 3
 @export var gravity: float = 1200
 @export var attack_position: float = 10
 @export var energy_fragment_scene: PackedScene 
+
 
 # -----------------------------
 #       INTERNAL VARIABLES
@@ -17,7 +17,7 @@ var spawn: bool = false
 var alive: bool = false
 var player_area: Area2D = null
 var in_atk_radius: bool = false
-var can_attack: bool = true
+var can_attack: bool = false
 var spawning = false
 var spawned = false
 var has_dropped = false
@@ -43,6 +43,8 @@ var stun_timer := 0.0
 @onready var detect_area = $PlayerDetect
 @onready var attack_area = $AttackRadius
 @onready var hitbox_area = $Hitbox
+@onready var attack_cooldown = $Attack_Cooldown
+var is_on_cooldown = true
 
 
 # -----------------------------
@@ -54,6 +56,8 @@ func _physics_process(delta: float) -> void:
 			anim.play("Idle")
 		else:
 			anim.play("Nothing")
+		if not is_on_floor():
+			velocity.y = gravity * delta
 		return
 
 	# Gravity
@@ -137,10 +141,17 @@ func _physics_process(delta: float) -> void:
 		for area in attack_area.get_overlapping_areas():
 			if area.is_in_group("PlayerHitbox"):
 				in_atk_radius = true
+				
 				if can_attack and anim.current_animation not in ["Damage", "Death"]:
 					can_attack = false
 					anim.play("Attack")
+				elif not can_attack and is_on_cooldown:
+					attack_cooldown.start()
+					is_on_cooldown = false
+					print('timer Started')
+					print(can_attack)
 				break
+				
 			else:
 				in_atk_radius = false
 
@@ -218,16 +229,8 @@ func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 
 		# REAL FIX — cooldown reliably restarts
 		can_attack = false
-		var t = get_tree().create_timer(attack_cooldown)
-		t.timeout.connect(_reset_attack)
-
-
-# Actual cooldown reset
-func _reset_attack():
-	can_attack = true
-	if in_atk_radius and alive:
-		anim.play("Attack")
-		can_attack = false
+		is_on_cooldown = true
+	
 
 
 # -----------------------------
@@ -253,3 +256,9 @@ func _on_spawn_area_entered(area):
 		if not spawned:
 			spawn_skeleton()
 			spawned = true
+
+
+func _on_attack_cooldown_timeout() -> void:
+	can_attack = true
+	if in_atk_radius and alive:
+		anim.play("Attack")
