@@ -1,6 +1,5 @@
-[gd_scene load_steps=14 format=3 uid="uid://c16tbi3f4vswk"]
+[gd_scene load_steps=13 format=3 uid="uid://c16tbi3f4vswk"]
 
-[ext_resource type="Script" uid="uid://dn74l7cj138af" path="res://Levels/level_1.gd" id="1_pml6m"]
 [ext_resource type="Texture2D" uid="uid://iy8bi3npn5qo" path="res://Levels/Tiles.png" id="2_vltsr"]
 [ext_resource type="PackedScene" uid="uid://3kltsx84mnf6" path="res://Characters/mc.tscn" id="3_rp5ft"]
 [ext_resource type="Texture2D" uid="uid://bt8p6xshsudbb" path="res://Levels/Red Sky/Layers/1.png" id="4_qeqk5"]
@@ -454,7 +453,6 @@ radius = 108.0
 height = 594.0
 
 [node name="Level2" type="Node2D"]
-script = ExtResource("1_pml6m")
 
 [node name="TileMap" type="TileMap" parent="."]
 modulate = Color(0, 0, 0, 1)

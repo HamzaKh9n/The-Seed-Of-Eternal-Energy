@@ -5,15 +5,44 @@ var dialog_shown = false
 var encounter_dialog_shown = false
 var portal_dialog_shown = false
 var portal_interactions = 0
+@onready var fade_rect: ColorRect = $FadeIn/ColorRect
+var input_paused = false
+
 
 func _ready() -> void:
-	Engine.time_scale = 1.2
-	Global.Level = 1
-	Global.max_frags = 10
-	Global.frags = 10
-	
-func _process(_delta: float) -> void:
+	SaveGame.load_game()
 
+	Global.Level = SaveGame.data.level
+	Global.frags = SaveGame.data.frags
+	Global.max_frags = 10
+	Global.deaths = SaveGame.data.Deaths
+	
+	input_paused = true
+	Engine.time_scale = 1.2
+	#Global.Level = 1
+	#Global.max_frags = 10
+	#Global.frags = 10
+	fade_rect.modulate.a = 1.0  # fully opaque
+	fade_in()
+	
+	
+func fade_in() -> void:
+	# Using SceneTreeTween for Godot 4.5+
+	var tween = create_tween()
+	tween.tween_property(fade_rect, "modulate:a", 0.0, 4.0)  # Fade to transparent in 1 second
+	tween.set_trans(Tween.TRANS_SINE)
+	tween.set_ease(Tween.EASE_IN_OUT)
+
+		
+		
+func _process(_delta: float) -> void:
+	
+	if input_paused:
+		if fade_rect.modulate.a == 0:
+			Global.stop = false
+			input_paused = false
+			await $DialogBox.enqueue("Welcome To Level 1")
+			await $DialogBox.enqueue("Collect All Energy Fragments and Find the Exit to move on Next Level")
 	# -------------------------
 	# ENCOUNTER DIALOG
 	# -------------------------
@@ -21,29 +50,28 @@ func _process(_delta: float) -> void:
 		encounter_dialog_shown = true   # SET FIRST
 		await $DialogBox.enqueue("The Enemies also drop Energy Fragments. Slay them if you can't find enough.")
 
-	# -------------------------
-	# FIRST FRAGMENT DIALOG
-	# -------------------------
-	if Global.frags == 1 and not dialog_shown:
-		dialog_shown = true   # SET FIRST
-		await $DialogBox.enqueue("After collecting an Energy Fragment, 20% of your health is healed.")
 
-	# -------------------------
-	# ALL FRAGS DIALOG
-	# -------------------------
-	if Global.frags == 2 and not portal_dialog_shown:
-		portal_dialog_shown = true   # SET FIRST
-		await $DialogBox.enqueue(
-            "After collecting all Energy Fragments, find the portal for the next area."
-		)
 
-		
-		
+func fade_out_and_change_scene(path: String) -> void:
+	var tween = create_tween()
+	tween.tween_property($ColorRect, "modulate:a", 1.0, 3.0) # fade to opaque
+	tween.set_trans(Tween.TRANS_SINE)
+	tween.set_ease(Tween.EASE_IN_OUT)
+	# Wrap the call in an anonymous function
+	tween.tween_callback(func():
+		get_tree().change_scene_to_file(path)
+	)
 
 
 func _input(event):
 	if event.is_action_pressed("ui_cancel"):
 		toggle_pause()
+	elif input_paused:
+		Global.stop = true
+		get_viewport().set_input_as_handled()
+	
+	
+	
 
 func toggle_pause():
 	paused = !paused
@@ -68,7 +96,8 @@ func _on_tp_area_entered(area: Area2D) -> void:
 	if area.is_in_group('PlayerHitbox'):
 		if Global.frags >= 10:
 			await $DialogBox.enqueue("Congratulations !! You Found the Portal.")
-			get_tree().change_scene_to_file("res://Levels/level_2.tscn")
+			Global.stop = false
+			fade_out_and_change_scene("res://Levels/level_2.tscn")
 		else:
 			if portal_interactions >= 1:
 				await $DialogBox.enqueue("Not Enough Energy Fragments")

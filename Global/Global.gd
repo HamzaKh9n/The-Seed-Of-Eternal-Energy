@@ -9,6 +9,9 @@ var max_frags = 10
 var stop = false
 var encounters = 0
 var dialog_count: int = 0
+var deaths = 0
+var EnemyKilled = []
+var EnergyCollected = []
 
 
 func _input(event):

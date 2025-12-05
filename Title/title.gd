@@ -17,4 +17,5 @@ func _on_quit_pressed() -> void:
 
 
 func _on_play_pressed() -> void:
-	get_tree().change_scene_to_file("res://Levels/level_2.tscn")
+	await SaveGame.load_game()
+	get_tree().change_scene_to_file("res://Levels/level_1.tscn")

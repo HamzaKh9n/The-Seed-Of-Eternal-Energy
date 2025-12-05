@@ -95,12 +95,7 @@ func _physics_process(delta: float) -> void:
 
 	# Flip sprite
 	if direction != 0 and not attack:
-		if direction > 0 and flipped:
-			scale.x = fixed_scale
-			flipped = false
-		elif direction < 0 and not flipped:
-			scale.x = -1 * fixed_scale
-			flipped = true
+		sprite.flip_h = direction < 0
 
 
 	# -----------------------------------------------------
