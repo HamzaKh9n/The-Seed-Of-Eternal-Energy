@@ -1,15 +1,16 @@
 extends Node
 
-const SAVE_PATH := "user://savegame.json"
+const SAVE_PATH := "user://savegame1.json"
 
 var data := {
 	"level" : 1,
 	"frags" : 0,
 	"player_health" : 100,
-	"checkpoint" : 1,
+	"checkpoint" : "",
 	"Deaths" : 0,
 	"EnergyTaken":[],
-	"EnemyKilled":[]
+	"EnemyKilled":[],
+	"Intro" : false,
 }
 
 func save_game():
@@ -43,9 +44,10 @@ func reset_game():
 		"level" : 1,
 		"frags" : 0,
 		"player_health" : 100,
-		"checkpoint" : 1,
+		"checkpoint" : "",
 		"Deaths" : 0,
 		"EnergyTaken":[],
-		"EnemyKilled":[]
+		"EnemyKilled":[],
+		"Intro":false,
 	}
 	save_game()

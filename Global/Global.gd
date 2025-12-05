@@ -12,7 +12,8 @@ var dialog_count: int = 0
 var deaths = 0
 var EnemyKilled = []
 var EnergyCollected = []
-
+var checkpoint = ""
+var Intro = false
 
 func _input(event):
 	if event is InputEventKey and event.pressed and event.keycode == KEY_F11:

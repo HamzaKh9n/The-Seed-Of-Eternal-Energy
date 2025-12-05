@@ -14,51 +14,46 @@ func _ready() -> void:
 
 	Global.Level = SaveGame.data.level
 	Global.frags = SaveGame.data.frags
-	Global.max_frags = 10
+	Global.health = SaveGame.data.player_health
+	Global.checkpoint = SaveGame.data.checkpoint
 	Global.deaths = SaveGame.data.Deaths
+	Global.EnergyCollected = SaveGame.data.EnergyTaken
+	Global.EnemyKilled = SaveGame.data.EnemyKilled
+	Global.Intro = SaveGame.data.Intro
 	
 	input_paused = true
 	Engine.time_scale = 1.2
-	#Global.Level = 1
-	#Global.max_frags = 10
-	#Global.frags = 10
 	fade_rect.modulate.a = 1.0  # fully opaque
 	fade_in()
 	
 	
 func fade_in() -> void:
-	# Using SceneTreeTween for Godot 4.5+
 	var tween = create_tween()
-	tween.tween_property(fade_rect, "modulate:a", 0.0, 4.0)  # Fade to transparent in 1 second
+	tween.tween_property(fade_rect, "modulate:a", 0.0, 4.0)
 	tween.set_trans(Tween.TRANS_SINE)
 	tween.set_ease(Tween.EASE_IN_OUT)
 
-		
-		
+
 func _process(_delta: float) -> void:
-	
 	if input_paused:
 		if fade_rect.modulate.a == 0:
 			Global.stop = false
 			input_paused = false
 			await $DialogBox.enqueue("Welcome To Level 1")
 			await $DialogBox.enqueue("Collect All Energy Fragments and Find the Exit to move on Next Level")
-	# -------------------------
 	# ENCOUNTER DIALOG
-	# -------------------------
 	if Global.encounters == 1 and not encounter_dialog_shown:
-		encounter_dialog_shown = true   # SET FIRST
+		encounter_dialog_shown = true
 		await $DialogBox.enqueue("The Enemies also drop Energy Fragments. Slay them if you can't find enough.")
-
 
 
 func fade_out_and_change_scene(path: String) -> void:
 	var tween = create_tween()
-	tween.tween_property($ColorRect, "modulate:a", 1.0, 3.0) # fade to opaque
+	tween.tween_property($ColorRect, "modulate:a", 1.0, 3.0)
 	tween.set_trans(Tween.TRANS_SINE)
 	tween.set_ease(Tween.EASE_IN_OUT)
-	# Wrap the call in an anonymous function
 	tween.tween_callback(func():
+		SaveGame.save_game()
 		get_tree().change_scene_to_file(path)
 	)
 
@@ -70,25 +65,21 @@ func _input(event):
 		Global.stop = true
 		get_viewport().set_input_as_handled()
 	
-	
-	
 
 func toggle_pause():
 	paused = !paused
 	get_tree().paused = paused
-
 	$"Pause menu".visible = paused
 
 
-	
 func _on_resume_pressed() -> void:
 	print("resume")
 	toggle_pause()
 
 
-#
 func _on_quit_pressed() -> void:
 	toggle_pause()
+	SaveGame.save_game()
 	get_tree().change_scene_to_file("res://Title/title.tscn")
 
 

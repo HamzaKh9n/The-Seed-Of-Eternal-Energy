@@ -1,7 +1,10 @@
-[gd_scene format=3 uid="uid://ds1cvpmed6s"]
+[gd_scene load_steps=2 format=3 uid="uid://puhbwnoigmhm"]
+
+[ext_resource type="Script" uid="uid://cb3u5fimwy0hd" path="res://Global/pause_menu.gd" id="1_877wt"]
 
 [node name="Pause menu" type="CanvasLayer"]
 process_mode = 3
+script = ExtResource("1_877wt")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 offset_right = 1158.0
