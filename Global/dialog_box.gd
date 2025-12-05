@@ -14,7 +14,7 @@ func show_dialog(text_to_show: String) -> void:
 	await wait_until_dialog_free()
 	get_tree().get_first_node_in_group("player").anim.play("Idle")
 	if get_tree().get_first_node_in_group("player").anim.current_animation == "Idle":
-		get_tree().paused = true
+		Global.stop = true
 		full_text = text_to_show
 		current_text = ""
 		typing = true
