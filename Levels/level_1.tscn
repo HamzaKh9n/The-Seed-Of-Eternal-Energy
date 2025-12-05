@@ -9,7 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://dkifncno0kis1" path="res://Global/HealthBar.tscn" id="7_0urlm"]
 [ext_resource type="PackedScene" uid="uid://cq74cj83psrv8" path="res://Levels/energy_fragment.tscn" id="8_77x7w"]
 [ext_resource type="PackedScene" uid="uid://btjcua0a03rqx" path="res://Global/dialog_box.tscn" id="9_xoyoh"]
-[ext_resource type="PackedScene" path="res://Global/dialog_trigger.tscn" id="10_f4pg2"]
+[ext_resource type="PackedScene" uid="uid://cs3sdxtqdqpq2" path="res://Global/dialog_trigger.tscn" id="10_f4pg2"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_77x7w"]
 texture = ExtResource("1_n0qsc")
@@ -617,11 +617,11 @@ scale = Vector2(1.7075473, 1.7075473)
 [node name="TP" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TP"]
-position = Vector2(5275, 1989)
+position = Vector2(5275, -2291)
 shape = SubResource("CapsuleShape2D_77x7w")
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="TP"]
-position = Vector2(5275, 1807)
+position = Vector2(5275, -2473)
 amount = 20
 lifetime = 5.5
 speed_scale = 2.98
