@@ -752,7 +752,7 @@ radius = 9.0
 height = 46.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_a43su"]
-radius = 73.93945
+radius = 123.54118
 height = 284.38248
 
 [node name="MC" type="CharacterBody2D"]
@@ -802,7 +802,7 @@ shape = SubResource("CapsuleShape2D_y5546")
 position = Vector2(0, 17)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackRadius"]
-position = Vector2(29, 1)
+position = Vector2(54, 7)
 scale = Vector2(0.54232925, 0.17581955)
 shape = SubResource("CapsuleShape2D_a43su")
 
