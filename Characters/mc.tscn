@@ -752,7 +752,7 @@ radius = 9.0
 height = 46.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_a43su"]
-radius = 123.54118
+radius = 59.00475
 height = 284.38248
 
 [node name="MC" type="CharacterBody2D" groups=["player"]]
@@ -783,7 +783,7 @@ scale = Vector2(33.954002, 0.89745325)
 shape = SubResource("RectangleShape2D_y5546")
 
 [node name="Attack Cooldown" type="Timer" parent="."]
-wait_time = 0.3
+wait_time = 0.5
 
 [node name="Combo Cooldown" type="Timer" parent="."]
 wait_time = 1.5
@@ -802,7 +802,7 @@ shape = SubResource("CapsuleShape2D_y5546")
 position = Vector2(0, 17)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackRadius"]
-position = Vector2(54, 7)
+position = Vector2(17.999998, 7)
 scale = Vector2(0.54232925, 0.17581955)
 shape = SubResource("CapsuleShape2D_a43su")
 

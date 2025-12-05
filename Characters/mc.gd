@@ -17,6 +17,7 @@ extends CharacterBody2D
 @onready var anim = $AnimationPlayer
 @onready var sprite = $AnimatedSprite2D
 @onready var attack_radius = $AttackRadius
+@onready var fixed_scale = scale.x
 
 # -----------------------------------------------------
 # STATES
@@ -25,7 +26,7 @@ var was_on_floor := false
 var attack = false
 var cooldown = false
 var combo = 0
-
+var flipped = false
 var is_hurt: bool = false
 var hurt_duration: float = 0.25
 var hurt_timer: float = 0.0
@@ -93,8 +94,13 @@ func _physics_process(delta: float) -> void:
 		direction = 1
 
 	# Flip sprite
-	if direction != 0 and not attack:  ### FIXED (attack no flip)
-		sprite.flip_h = direction < 0
+	if direction != 0 and not attack:
+		if direction > 0 and flipped:
+			scale.x = fixed_scale
+			flipped = false
+		elif direction < 0 and not flipped:
+			scale.x = -1 * fixed_scale
+			flipped = true
 
 
 	# -----------------------------------------------------

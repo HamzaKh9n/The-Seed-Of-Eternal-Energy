@@ -12,7 +12,7 @@ extends CharacterBody2D
 # -----------------------------
 #       INTERNAL VARIABLES
 # -----------------------------
-var health = 75
+var health = 100
 var spawn: bool = false
 var alive: bool = false
 var player_area: Area2D = null
@@ -31,7 +31,7 @@ var knockback_duration := 0.2
 var knockback_timer := 0.0
 
 var stunned := false
-var stun_time := 0.4
+var stun_time := 0.0
 var stun_timer := 0.0
 
 # -----------------------------
