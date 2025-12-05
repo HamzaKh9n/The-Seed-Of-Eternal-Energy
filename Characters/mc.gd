@@ -35,11 +35,16 @@ var invincible_time: float = 1.0
 var flash_speed: float = 0.1
 var can_push = true
 
+
 func _ready() -> void:
 	anim.play("Idle")
 
 
 func _physics_process(delta: float) -> void:
+	if Global.stop:
+		anim.play('Idle')
+		return
+		
 	if Global.health <= 0:
 		anim.play("Death")
 		var tree = get_tree()
@@ -260,7 +265,7 @@ func take_damage(amount, dir, power) -> void:
 		shake_camera(0.25, 18)
 
 		# --- FIX 3: Small freeze frame for impact ---
-		await pause_brief(0.15, 0.1)
+		await pause_brief(0.05, 0.1)
 
 		# --- FIX 4: DO NOT cancel velocity here ---
 		# Do NOT reset velocity.x = 0  (this kills knockback)

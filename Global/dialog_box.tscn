@@ -1,67 +1,53 @@
-[gd_scene load_steps=5 format=3 uid="uid://btjcua0a03rqx"]
+[gd_scene load_steps=4 format=3 uid="uid://btjcua0a03rqx"]
 
-[ext_resource type="FontFile" uid="uid://dg0l3r1js8t3e" path="res://Global/Poppins/Poppins-Medium.ttf" id="1_586pb"]
-[ext_resource type="Script" path="res://Global/dialog_box.gd" id="1_gnfpf"]
+[ext_resource type="Script" uid="uid://dv1l8rpyfmumt" path="res://Global/dialog_box.gd" id="1_gnfpf"]
+[ext_resource type="FontFile" uid="uid://ws62klh1aula" path="res://Global/RasterForgeRegular-JpBgm.ttf" id="2_gnfpf"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0imre"]
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
-corner_radius_top_left = 2
-corner_radius_top_right = 2
-corner_radius_bottom_right = 2
-corner_radius_bottom_left = 2
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gnfpf"]
-bg_color = Color(1, 0.9019608, 0.72156864, 1)
-border_width_left = 11
-border_width_top = 1
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_586pb"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
 border_color = Color(1, 1, 1, 1)
+expand_margin_left = 18.0
+expand_margin_top = 18.0
+expand_margin_right = 18.0
+expand_margin_bottom = 18.0
 
 [node name="DialogBox" type="CanvasLayer" groups=["DialogBox"]]
+process_mode = 3
+visible = false
 script = ExtResource("1_gnfpf")
 
 [node name="Panel" type="Panel" parent="."]
-visible = false
-modulate = Color(1, 0.8745098, 0.74509805, 1)
-texture_filter = 1
-offset_left = 165.0
-offset_top = 27.0
-offset_right = 205.0
-offset_bottom = 67.0
-scale = Vector2(21.147968, 6.100163)
-theme_override_styles/panel = SubResource("StyleBoxFlat_0imre")
+offset_left = 36.0
+offset_top = 36.0
+offset_right = 1096.0
+offset_bottom = 230.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_586pb")
 
-[node name="Label" type="Label" parent="Panel"]
-texture_filter = 1
-layout_mode = 0
-offset_left = 4.8231587
-offset_top = 7.8686423
-offset_right = 296.1967
-offset_bottom = 274.3643
-scale = Vector2(0.01, 0.01)
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
-theme_override_fonts/font = ExtResource("1_586pb")
-theme_override_font_sizes/font_size = 84
-text = "blah blah"
-autowrap_mode = 3
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+offset_left = 36.0
+offset_top = 36.0
+offset_right = 1096.0
+offset_bottom = 230.0
 
-[node name="Timer" type="Timer" parent="Panel"]
-wait_time = 0.03
-
-[node name="MarginContainer" type="MarginContainer" parent="."]
-visible = false
-anchors_preset = 10
-anchor_right = 1.0
-offset_left = 41.0
-offset_top = 271.0
-offset_right = -27.0
-offset_bottom = 282.0
-grow_horizontal = 2
-scale = Vector2(1, -21.952095)
-
-[node name="Panel" type="Panel" parent="MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_gnfpf")
+size_flags_horizontal = 3
+
+[node name="RichTextLabel" type="RichTextLabel" parent="HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_fonts/normal_font = ExtResource("2_gnfpf")
+theme_override_font_sizes/normal_font_size = 23
+bbcode_enabled = true
+text = "
+Hello njnfsvnsfonv
+"
+scroll_active = false
+visible_characters_behavior = 1
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+max_polyphony = 1000

@@ -8,8 +8,8 @@
 [ext_resource type="PackedScene" uid="uid://dvk5ws487bo4j" path="res://Characters/grave_skeleton.tscn" id="5_syshm"]
 [ext_resource type="PackedScene" uid="uid://dkifncno0kis1" path="res://Global/HealthBar.tscn" id="7_0urlm"]
 [ext_resource type="PackedScene" uid="uid://cq74cj83psrv8" path="res://Levels/energy_fragment.tscn" id="8_77x7w"]
-[ext_resource type="PackedScene" uid="uid://b1d4pqdsqnn84" path="res://Global/dialog_box.tscn" id="9_xoyoh"]
-[ext_resource type="PackedScene" uid="uid://cs3sdxtqdqpq2" path="res://Global/dialog_trigger.tscn" id="10_f4pg2"]
+[ext_resource type="PackedScene" uid="uid://btjcua0a03rqx" path="res://Global/dialog_box.tscn" id="9_xoyoh"]
+[ext_resource type="PackedScene" path="res://Global/dialog_trigger.tscn" id="10_f4pg2"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_77x7w"]
 texture = ExtResource("1_n0qsc")
@@ -692,7 +692,7 @@ text = "Quit"
 [node name="DialogTrigger1" parent="." instance=ExtResource("10_f4pg2")]
 position = Vector2(908.99994, -339.00003)
 scale = Vector2(9.36337, 3.4118855)
-dialog = "These are Energy Fragments\\nCollect 10 of them to Become Capable of going in Forgotten Dome"
+dialog = "These are Energy Fragments. Collect 10 of them to Become Capable of going in Forgotten Dome"
 
 [connection signal="area_entered" from="S1" to="." method="_on_s_1_area_entered"]
 [connection signal="area_entered" from="TP" to="." method="_on_tp_area_entered"]

@@ -6,6 +6,8 @@ var frags = 0
 var Power = 25
 var Level = 1
 var max_frags = 10
+var stop = false
+var encounters = 0
 
 
 func _input(event):
