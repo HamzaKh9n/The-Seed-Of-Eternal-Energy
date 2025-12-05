@@ -1,43 +1,65 @@
 extends CanvasLayer
 
-@onready var panel = $Panel
-@onready var label = $Panel/Label
-@onready var type_timer = $Panel/Timer
+@onready var label: RichTextLabel = $HBoxContainer/VBoxContainer/RichTextLabel
+@onready var type_sound: AudioStreamPlayer2D = $AudioStreamPlayer2D
 
 var full_text := ""
-var current_char := 0
+var current_text := ""
 var typing := false
-var finished := false
+var char_speed := 0.02  # time between letters
+var dialog_open = false
 
-func show_dialog(text: String):
-	full_text = text
-	label.text = ""
-	current_char = 0
-	typing = true
-	finished = false
-	panel.visible = true
-	type_timer.start()
 
-func _on_Timer_timeout():
-	if typing:
-		if current_char < full_text.length():
-			label.text += full_text[current_char]
-			current_char += 1
-		else:
-			typing = false
-			finished = true
-			type_timer.stop()
+func show_dialog(text_to_show: String) -> void:
+	await wait_until_dialog_free()
+	get_tree().get_first_node_in_group("player").anim.play("Idle")
+	if get_tree().get_first_node_in_group("player").anim.current_animation == "Idle":
+		get_tree().paused = true
+		full_text = text_to_show
+		current_text = ""
+		typing = true
+		dialog_open = true
+	
 
-func _input(event):
-	if not panel.visible:
-		return
+		label.bbcode_enabled = true
+		label.text = ""              # start empty
+		visible = true               # show dialog UI
 
-	# Skip typing
-	if event.is_action_pressed("ui_accept"):
+		type_text()                 # start typing coroutine
+
+
+func type_text() -> void:
+	for i in full_text.length():
+		if not typing:
+			break   # instantly skip to full text
+
+		current_text += full_text[i]
+		label.text = current_text
+
+		if not type_sound.playing:
+			type_sound.play()
+
+		await get_tree().create_timer(char_speed).timeout
+
+	# finish
+	label.text = full_text
+	typing = false
+
+
+# Skip text on SPACE
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_accept"):  # SPACE or ENTER
 		if typing:
-			label.text = full_text
-			typing = false
-			finished = true
-			type_timer.stop()
-		elif finished:
-			panel.visible = false
+			typing = false   # stops the coroutine, text finishes instantly
+		else:
+			hide_dialog()    # close when finished
+			
+
+func wait_until_dialog_free() -> void:
+	while dialog_open:
+		await get_tree().process_frame
+
+func hide_dialog() -> void:
+	get_tree().paused = false
+	dialog_open = false
+	visible = false

@@ -398,7 +398,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_o8y3f")
 }],
-"loop": true,
+"loop": false,
 "name": &"Shield",
 "speed": 10.0
 }, {
@@ -755,7 +755,7 @@ height = 46.0
 radius = 73.93945
 height = 284.38248
 
-[node name="MC" type="CharacterBody2D"]
+[node name="MC" type="CharacterBody2D" groups=["player"]]
 visibility_layer = 2
 collision_layer = 4
 collision_mask = 4
@@ -765,7 +765,7 @@ script = ExtResource("1_8u11n")
 position = Vector2(-3, 0)
 scale = Vector2(0.9372605, 0.94820493)
 sprite_frames = SubResource("SpriteFrames_surwc")
-animation = &"Idle"
+animation = &"Attack 1"
 autoplay = "Idle"
 frame = 1
 offset = Vector2(4, 0)
@@ -783,7 +783,7 @@ scale = Vector2(33.954002, 0.89745325)
 shape = SubResource("RectangleShape2D_y5546")
 
 [node name="Attack Cooldown" type="Timer" parent="."]
-wait_time = 0.5
+wait_time = 0.3
 
 [node name="Combo Cooldown" type="Timer" parent="."]
 wait_time = 1.5
