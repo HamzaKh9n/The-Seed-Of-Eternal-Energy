@@ -617,11 +617,11 @@ scale = Vector2(1.7075473, 1.7075473)
 [node name="TP" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="TP"]
-position = Vector2(5275, -2291)
+position = Vector2(5275, 1989)
 shape = SubResource("CapsuleShape2D_77x7w")
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="TP"]
-position = Vector2(5275, -2473)
+position = Vector2(5275, 1807)
 amount = 20
 lifetime = 5.5
 speed_scale = 2.98
