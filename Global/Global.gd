@@ -14,6 +14,9 @@ var EnemyKilled = []
 var EnergyCollected = []
 var checkpoint = ""
 var Intro = false
+var Level1IntroShown := false
+var just_reloaded = false
+
 
 func _input(event):
 	if event is InputEventKey and event.pressed and event.keycode == KEY_F11:
@@ -27,3 +30,8 @@ func toggle_fullscreen():
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN, win_id)
 	else:
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED, win_id)
+
+func safe_frame() -> void:
+	while get_tree() == null:
+		await Engine.get_main_loop().process_frame
+	await get_tree().process_frame

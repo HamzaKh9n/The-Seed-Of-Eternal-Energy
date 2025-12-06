@@ -30,6 +30,7 @@ func _on_play_pressed() -> void:
 		get_tree().change_scene_to_file('res://Global/intro.tscn')
 	else:
 		if Global.Level == 1:
+			await SaveGame.reset_game()
 			get_tree().change_scene_to_file("res://Levels/level_1.tscn")
 		elif Global.Level == 2:
 			get_tree().change_scene_to_file("res://Levels/level_2.tscn")

@@ -41,12 +41,20 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	# Prevent double gravity application
+	var applied_gravity := false
+
 	if Global.stop:
-		anim.play('Idle')
+		anim.play("Idle")
+		velocity.x = 0
 		if not is_on_floor():
-			velocity.y = gravity * delta
+			if not applied_gravity:
+				velocity.y += gravity * delta
+				applied_gravity = true
+		move_and_slide()
 		return
 		
+	# PLAYER DEATH
 	if Global.health <= 0:
 		anim.play("Death")
 		var tree = get_tree()
@@ -59,31 +67,36 @@ func _physics_process(delta: float) -> void:
 		print(level)
 		match level:
 			1:
-				await tree.process_frame
+				await Global.safe_frame()
 				tree.change_scene_to_file("res://Levels/level_1.tscn")
 			2:
-				await tree.process_frame
+				await Global.safe_frame()
 				tree.change_scene_to_file("res://Levels/level_2.tscn")
 
 			3:
-				await tree.process_frame
+				await Global.safe_frame()
 				tree.change_scene_to_file("res://Emperor's Grave Scenes/graves.tscn")
-	# Hurt State
+		return
+
+	# HURT STATE
 	if is_hurt:
 		hurt_timer -= delta
 		velocity.x = lerp(velocity.x, 0.0, 6.0 * delta)
-		velocity.y += gravity * delta
+
+		if not applied_gravity:
+			velocity.y += gravity * delta
+			applied_gravity = true
 
 		if hurt_timer <= 0:
 			is_hurt = false
+
 		move_and_slide()
 		return
 
-	var direction := 0
-	if Input.is_action_pressed("A"):
-		direction = -1
-	elif Input.is_action_pressed("D"):
-		direction = 1
+	# HORIZONTAL MOVEMENT
+	var dir_right := 1 if Input.is_action_pressed("D") else 0
+	var dir_left := 1 if Input.is_action_pressed("A") else 0
+	var direction := dir_right - dir_left
 
 	if direction != 0 and not attack:
 		sprite.flip_h = direction < 0
@@ -92,38 +105,50 @@ func _physics_process(delta: float) -> void:
 		if direction != 0:
 			velocity.x = lerp(velocity.x, direction * move_speed, acceleration * delta)
 			if is_on_floor() and anim.current_animation not in ["Land"]:
+				move_speed = 600
 				anim.play("Run")
 		else:
-			velocity.x = lerp(velocity.x, 0.0, deceleration * delta)
-			if is_on_floor() and anim.current_animation not in ["Land", "Jump" , "Death"]:
+			# Avoid jitter while airborne
+			if is_on_floor():
+				move_speed = 600
+				velocity.x = lerp(velocity.x, 0.0, deceleration * delta)
+			if is_on_floor() and anim.current_animation not in ["Land", "Jump", "Death"]:
 				anim.play("Idle")
 
+	# JUMP INPUT
 	if is_on_floor() and Input.is_action_just_pressed("Space") and not attack:
 		$JumpBreath.play()
 		anim.play("Jump")
-		velocity.y = jump_force  
+		velocity.y = jump_force
 
+	# SMOOTHER GRAVITY HANDLING
 	if not is_on_floor():
 		if velocity.y < 0:
-			if Input.is_action_pressed("Space"):
-				velocity.y += low_gravity * delta
-			else:
-				velocity.y += high_gravity * delta
+			move_speed = 500
+			var g = low_gravity if Input.is_action_pressed("Space") else high_gravity
+			if not applied_gravity:
+				velocity.y += g * delta
+				applied_gravity = true
 		else:
-			velocity.y += gravity * delta
+			if not applied_gravity:
+				velocity.y += gravity * delta
+				applied_gravity = true
 
+	# ANIM WHILE AIRBORNE
 	if not is_on_floor() and not attack:
 		if velocity.y > 0:
 			anim.play("Fall")
 		elif velocity.y < 0:
 			anim.play("Jump")
 
+	# LAND ANIMATION
 	if not was_on_floor and is_on_floor() and velocity.y >= 0:
 		if anim.current_animation not in ["Jump", "Fall", "Hurt"]:
 			anim.play("Land")
 
 	was_on_floor = is_on_floor()
 
+	# ATTACK INPUT
 	if Input.is_action_just_pressed("Attack") and not cooldown:
 		attack = true
 		cooldown = true
@@ -153,7 +178,6 @@ func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 
 	if anim_name.begins_with("Attack"):
 		attack = false
-		move_speed = 600
 		Do_attack()
 		
 
@@ -200,7 +224,7 @@ func shake_camera(duration: float = 0.5, magnitude: float = 8.0) -> void:
 	var timer = 0.0
 	while timer < duration:
 		cam.position = original_pos + Vector2(randf_range(-magnitude, magnitude), randf_range(-magnitude, magnitude))
-		await get_tree().process_frame
+		await Global.safe_frame()
 		timer += 0.016
 	cam.position = original_pos
 	cam.process_mode = original_mode

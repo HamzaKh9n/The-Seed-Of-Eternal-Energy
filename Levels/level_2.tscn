@@ -1,5 +1,6 @@
-[gd_scene load_steps=13 format=3 uid="uid://c16tbi3f4vswk"]
+[gd_scene load_steps=15 format=3 uid="uid://c16tbi3f4vswk"]
 
+[ext_resource type="Script" uid="uid://c2j04aftcv0m2" path="res://Levels/level_2.gd" id="1_rp5ft"]
 [ext_resource type="Texture2D" uid="uid://iy8bi3npn5qo" path="res://Levels/Tiles.png" id="2_vltsr"]
 [ext_resource type="PackedScene" uid="uid://3kltsx84mnf6" path="res://Characters/mc.tscn" id="3_rp5ft"]
 [ext_resource type="Texture2D" uid="uid://bt8p6xshsudbb" path="res://Levels/Red Sky/Layers/1.png" id="4_qeqk5"]
@@ -8,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://dkifncno0kis1" path="res://Global/HealthBar.tscn" id="7_lmqi1"]
 [ext_resource type="PackedScene" uid="uid://cq74cj83psrv8" path="res://Levels/energy_fragment.tscn" id="8_5yfph"]
 [ext_resource type="PackedScene" uid="uid://btjcua0a03rqx" path="res://Global/dialog_box.tscn" id="9_vltsr"]
+[ext_resource type="Script" uid="uid://cb3u5fimwy0hd" path="res://Global/pause_menu.gd" id="10_rp5ft"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_vltsr"]
 texture = ExtResource("2_vltsr")
@@ -453,6 +455,7 @@ radius = 108.0
 height = 594.0
 
 [node name="Level2" type="Node2D"]
+script = ExtResource("1_rp5ft")
 
 [node name="TileMap" type="TileMap" parent="."]
 modulate = Color(0, 0, 0, 1)
@@ -465,6 +468,7 @@ layer_0/tile_data = PackedInt32Array(655360, 1048576, 805306389, 720896, 1048576
 [node name="MC" parent="." instance=ExtResource("3_rp5ft")]
 position = Vector2(327.00098, 337)
 scale = Vector2(2.2548895, 2.2548895)
+air_speed_scale = 1.65
 
 [node name="Camera2D" type="Camera2D" parent="MC"]
 position = Vector2(0, -25.721878)
@@ -660,4 +664,50 @@ position = Vector2(2753, -1778)
 
 [node name="DialogBox" parent="." instance=ExtResource("9_vltsr")]
 
+[node name="FadeIn" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="ColorRect" type="ColorRect" parent="FadeIn"]
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(29.181911, 16.565222)
+color = Color(0, 0, 0, 1)
+
+[node name="Pause menu" type="CanvasLayer" parent="."]
+process_mode = 3
+visible = false
+script = ExtResource("10_rp5ft")
+
+[node name="ColorRect" type="ColorRect" parent="Pause menu"]
+offset_right = 1158.0
+offset_bottom = 652.0
+color = Color(0, 0.032704808, 0, 0.3137255)
+
+[node name="Resume" type="Button" parent="Pause menu"]
+offset_left = 515.0
+offset_top = 194.0
+offset_right = 585.0
+offset_bottom = 225.0
+scale = Vector2(1.4865148, 1.4865148)
+text = "Resume"
+
+[node name="Save" type="Button" parent="Pause menu"]
+offset_left = 515.0
+offset_top = 283.0
+offset_right = 585.0
+offset_bottom = 314.0
+scale = Vector2(1.4865148, 1.4865148)
+text = "Save
+"
+
+[node name="Quit" type="Button" parent="Pause menu"]
+offset_left = 515.0
+offset_top = 371.0
+offset_right = 585.0
+offset_bottom = 402.0
+scale = Vector2(1.4865148, 1.4865148)
+text = "Quit"
+
 [connection signal="area_entered" from="S1" to="." method="_on_s_1_area_entered"]
+[connection signal="pressed" from="Pause menu/Resume" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="Pause menu/Quit" to="." method="_on_quit_pressed"]
