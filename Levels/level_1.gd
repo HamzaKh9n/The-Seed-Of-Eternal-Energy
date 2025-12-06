@@ -8,6 +8,7 @@ var portal_interactions = 0
 var input_paused = false
 
 func _ready() -> void:
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	SaveGame.load_game()
 
 	Global.Level = SaveGame.data.level
@@ -82,6 +83,13 @@ func toggle_pause():
 	paused = !paused
 	get_tree().paused = paused
 	$"Pause menu".visible = paused
+	if paused:
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		$MC/CROSSROADS.stream_paused = true
+		
+	else:
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		$MC/CROSSROADS.stream_paused = false
 
 func _on_resume_pressed() -> void:
 	toggle_pause()

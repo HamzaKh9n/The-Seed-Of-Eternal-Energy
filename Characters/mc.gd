@@ -22,7 +22,7 @@ extends CharacterBody2D
 # STATES
 # -----------------------------------------------------
 var was_on_floor := false
-var attack = false
+var attack = false 
 var cooldown = false
 var combo = 0
 var flipped = false
@@ -121,10 +121,23 @@ func _physics_process(delta: float) -> void:
 		anim.play("Jump")
 		velocity.y = jump_force
 
-	# SMOOTHER GRAVITY HANDLING
+	# SMOOTHER GRAVITY HANDLING + AIR CONTROL FIX
 	if not is_on_floor():
+
+		# -------------------------------
+		# ⭐ AIR MOVEMENT FIX ⭐
+		# Only move in air when A/D is held.
+		# If released, drop straight down.
+		# -------------------------------
+		var air_dir := Input.get_action_strength("D") - Input.get_action_strength("A")
+
+		if air_dir != 0:
+			velocity.x = lerp(velocity.x, air_dir * (move_speed * 0.6), 8 * delta)
+		else:
+			velocity.x = lerp(velocity.x, 0.0, 12 * delta)
+		# -------------------------------
+
 		if velocity.y < 0:
-			move_speed = 500
 			var g = low_gravity if Input.is_action_pressed("Space") else high_gravity
 			if not applied_gravity:
 				velocity.y += g * delta

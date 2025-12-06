@@ -3,6 +3,7 @@ extends Node2D
 @onready var music := $TitleMusic
 
 func _ready():
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	print(music)
 	music.play()
 	SaveGame.load_game()
@@ -26,15 +27,15 @@ func _on_quit_pressed() -> void:
 
 func _on_play_pressed() -> void:
 	await SaveGame.load_game()
-	if not Global.Intro:
-		get_tree().change_scene_to_file('res://Global/intro.tscn')
-	else:
-		if Global.Level == 1:
-			await SaveGame.reset_game()
-			get_tree().change_scene_to_file("res://Levels/level_1.tscn")
-		elif Global.Level == 2:
-			get_tree().change_scene_to_file("res://Levels/level_2.tscn")
-		elif Global.Level == 3:
-			get_tree().change_scene_to_file("res://Levels/level_3.tscn")
-		elif Global.Level == 0:
-			get_tree().change_scene_to_file("res://Emperor's Grave Scenes/graves.tscn")
+	#if not Global.Intro:
+		#get_tree().change_scene_to_file('res://Global/intro.tscn')
+	#else:
+		#if Global.Level == 1:
+			#get_tree().change_scene_to_file("res://Levels/level_1.tscn")
+		#elif Global.Level == 2:
+			#get_tree().change_scene_to_file("res://Levels/level_2.tscn")
+		#elif Global.Level == 3:
+			#get_tree().change_scene_to_file("res://Levels/level_3.tscn")
+		#elif Global.Level == 0:
+			#get_tree().change_scene_to_file("res://Emperor's Grave Scenes/graves.tscn")
+	get_tree().change_scene_to_file("res://Levels/level_1.tscn")
