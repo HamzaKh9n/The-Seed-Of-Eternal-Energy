@@ -651,7 +651,6 @@ tracks/1/keys = {
 [sub_resource type="Animation" id="Animation_a43su"]
 resource_name = "Jump"
 length = 0.26
-loop_mode = 2
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -784,7 +783,7 @@ script = ExtResource("1_8u11n")
 position = Vector2(-3, 0)
 scale = Vector2(0.9372605, 0.94820493)
 sprite_frames = SubResource("SpriteFrames_surwc")
-animation = &"Dash"
+animation = &"Jump"
 autoplay = "Idle"
 frame = 1
 offset = Vector2(4, 0)
