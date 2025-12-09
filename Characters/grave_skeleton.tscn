@@ -599,7 +599,7 @@ energy_fragment_scene = ExtResource("2_0o5mu")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(1.4716464, 1.4716464)
 sprite_frames = SubResource("SpriteFrames_qf88e")
-animation = &"Walk"
+animation = &"Death"
 autoplay = "Nothing"
 frame = 1
 
@@ -644,6 +644,10 @@ shape = SubResource("CircleShape2D_wvqbg")
 [node name="Attack_Cooldown" type="Timer" parent="."]
 wait_time = 0.5
 
+[node name="Death TImer" type="Timer" parent="."]
+wait_time = 0.5
+
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
 [connection signal="area_entered" from="Spawn" to="." method="_on_spawn_area_entered"]
 [connection signal="timeout" from="Attack_Cooldown" to="." method="_on_attack_cooldown_timeout"]
+[connection signal="timeout" from="Death TImer" to="." method="_on_death_t_imer_timeout"]

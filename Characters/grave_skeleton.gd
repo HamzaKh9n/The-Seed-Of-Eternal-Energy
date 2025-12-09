@@ -44,6 +44,7 @@ var stun_timer := 0.0
 @onready var attack_area = $AttackRadius
 @onready var hitbox_area = $Hitbox
 @onready var attack_cooldown = $Attack_Cooldown
+@onready var death_timer = $"Death TImer"
 var is_on_cooldown = true
 
 
@@ -66,15 +67,15 @@ func _physics_process(delta: float) -> void:
 
 	# Handle Death
 	if health <= 0:
-		anim.play("Death")
+		if not anim.current_animation == 'Death':
+			anim.play("Death")
 		if has_dropped:
 			return
 		has_dropped = true
 		var fragment = energy_fragment_scene.instantiate()
 		fragment.global_position = global_position
 		get_parent().add_child(fragment)
-		await anim.animation_finished
-		queue_free()
+		death_timer.start()
 		return
 
 	# Not spawned yet
@@ -262,3 +263,7 @@ func _on_attack_cooldown_timeout() -> void:
 	can_attack = true
 	if in_atk_radius and alive:
 		anim.play("Attack")
+
+
+func _on_death_t_imer_timeout() -> void:
+	queue_free()
