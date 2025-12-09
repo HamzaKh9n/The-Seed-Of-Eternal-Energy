@@ -29,11 +29,15 @@ var flipped = false
 var is_hurt: bool = false
 var hurt_duration: float = 0.25
 var hurt_timer: float = 0.0
-
 var can_hurt = true
 var invincible_time: float = 1.0
 var flash_speed: float = 0.1
 var can_push = true
+var can_dash = true
+var is_dashing = false
+@export var dash_speed : float = 1800.0
+@onready var dash_cooldown = $"Dash Cooldown"
+@onready var dash_time = $"Dash Time"
 
 
 func _ready() -> void:
@@ -77,6 +81,10 @@ func _physics_process(delta: float) -> void:
 				await Global.safe_frame()
 				tree.change_scene_to_file("res://Emperor's Grave Scenes/graves.tscn")
 		return
+	
+	
+		
+		
 
 	# HURT STATE
 	if is_hurt:
@@ -97,6 +105,10 @@ func _physics_process(delta: float) -> void:
 	var dir_right := 1 if Input.is_action_pressed("D") else 0
 	var dir_left := 1 if Input.is_action_pressed("A") else 0
 	var direction := dir_right - dir_left
+	
+	var dash_dir_right = 1 if not sprite.flip_h else 0
+	var dash_dir_left = -1 if sprite.flip_h else 0
+	var dash_direction = dash_dir_right - dash_dir_left
 
 	if direction != 0 and not attack:
 		sprite.flip_h = direction < 0
@@ -109,17 +121,33 @@ func _physics_process(delta: float) -> void:
 				anim.play("Run")
 		else:
 			# Avoid jitter while airborne
-			if is_on_floor():
-				move_speed = 600
-				velocity.x = lerp(velocity.x, 0.0, deceleration * delta)
-			if is_on_floor() and anim.current_animation not in ["Land", "Jump", "Death"]:
-				anim.play("Idle")
+			if not is_dashing:
+				if is_on_floor():
+					move_speed = 600
+					velocity.x = lerp(velocity.x, 0.0, deceleration * delta)
+				if is_on_floor() and anim.current_animation not in ["Land", "Jump", "Death" , "Dash"]:
+					anim.play("Idle")
+
+	if Input.is_action_pressed("Dash"):
+		if can_dash:
+			print("Dashhh")
+			is_dashing = true
+			can_dash = false
+			anim.play("Dash")
+			dash_cooldown.start()
+			dash_time.start()
+			velocity.y = 0
+			velocity.x = dash_direction * dash_speed
+			await dash_time.timeout
+			print("Donee")
+			velocity.x = 0
 
 	# JUMP INPUT
 	if is_on_floor() and Input.is_action_just_pressed("Space") and not attack:
 		$JumpBreath.play()
-		anim.play("Jump")
 		velocity.y = jump_force
+		anim.play("Jump")
+		
 
 	# SMOOTHER GRAVITY HANDLING + AIR CONTROL FIX
 	if not is_on_floor():
@@ -151,8 +179,6 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor() and not attack:
 		if velocity.y > 0:
 			anim.play("Fall")
-		elif velocity.y < 0:
-			anim.play("Jump")
 
 	# LAND ANIMATION
 	if not was_on_floor and is_on_floor() and velocity.y >= 0:
@@ -267,3 +293,8 @@ func start_invincibility() -> void:
 		timer += flash_speed * 2
 	sprite.modulate = Color(1, 1, 1, 1)
 	can_hurt = true
+
+
+func _on_dash_cooldown_timeout() -> void:
+	is_dashing = false
+	can_dash = true
