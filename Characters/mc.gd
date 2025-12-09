@@ -18,6 +18,14 @@ extends CharacterBody2D
 @onready var attack_radius = $AttackRadius
 @onready var fixed_scale = scale.x
 
+# AfterImage
+
+var AfterImage = preload("res://Global/ghost.tscn")
+var afterimage_cooldown := 0.0
+var ghost_position = null
+var ghost = null
+
+
 # -----------------------------------------------------
 # STATES
 # -----------------------------------------------------
@@ -33,19 +41,22 @@ var can_hurt = true
 var invincible_time: float = 1.0
 var flash_speed: float = 0.1
 var can_push = true
+
 var can_dash = true
 var is_dashing = false
 @export var dash_speed : float = 1800.0
 @onready var dash_cooldown = $"Dash Cooldown"
 @onready var dash_time = $"Dash Time"
+var air_dash_used = false
 
 
 func _ready() -> void:
+	$Dust.global_position.x = global_position.x - 80
+	$Dust.visible = false
 	anim.play("Idle")
 
 
 func _physics_process(delta: float) -> void:
-	# Prevent double gravity application
 	var applied_gravity := false
 
 	if Global.stop:
@@ -57,7 +68,7 @@ func _physics_process(delta: float) -> void:
 				applied_gravity = true
 		move_and_slide()
 		return
-		
+
 	# PLAYER DEATH
 	if Global.health <= 0:
 		anim.play("Death")
@@ -68,7 +79,6 @@ func _physics_process(delta: float) -> void:
 		if Global.frags <= 0:
 			Global.frags = 0
 		var level = Global.Level
-		print(level)
 		match level:
 			1:
 				await Global.safe_frame()
@@ -76,15 +86,10 @@ func _physics_process(delta: float) -> void:
 			2:
 				await Global.safe_frame()
 				tree.change_scene_to_file("res://Levels/level_2.tscn")
-
 			3:
 				await Global.safe_frame()
 				tree.change_scene_to_file("res://Emperor's Grave Scenes/graves.tscn")
 		return
-	
-	
-		
-		
 
 	# HURT STATE
 	if is_hurt:
@@ -101,70 +106,107 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		return
 
-	# HORIZONTAL MOVEMENT
+	# ----------------------------------------------------
+	# MOVEMENT INPUTS
+	# ----------------------------------------------------
 	var dir_right := 1 if Input.is_action_pressed("D") else 0
 	var dir_left := 1 if Input.is_action_pressed("A") else 0
 	var direction := dir_right - dir_left
-	
-	var dash_dir_right = 1 if not sprite.flip_h else 0
-	var dash_dir_left = -1 if sprite.flip_h else 0
-	var dash_direction = dash_dir_right - dash_dir_left
 
+	# DASH DIRECTION (same as facing)
+	var dash_direction := -1 if sprite.flip_h else 1
+
+	# Flip sprite only when not attacking
 	if direction != 0 and not attack:
 		sprite.flip_h = direction < 0
+		$Dust.flip_h = !sprite.flip_h
+		if sprite.flip_h:
+			$Dust.global_position.x = global_position.x + 80
+		else:
+			$Dust.global_position.x = global_position.x - 80
+		
 
+	# ----------------------------------------------------
+	# DASH INPUT (FIXED — WORKS ANY TIME)
+	# ----------------------------------------------------
+	if Input.is_action_just_pressed("Dash") and not attack:
+		var allow_dash := false
+
+		if is_on_floor():
+			allow_dash = can_dash
+		else:
+			allow_dash = can_dash and not air_dash_used
+
+		if allow_dash:
+			is_dashing = true
+			can_dash = false
+			
+			if is_dashing:
+				spawn_afterimage()
+
+					
+			if not is_on_floor():
+				air_dash_used = true
+
+			anim.play("Dash")
+			$Dust.visible = true
+			$Dust/DustanimationPlayer.play("Dust")
+			
+			dash_cooldown.start()
+			dash_time.start()
+
+			velocity.y = 0
+			velocity.x = dash_direction * dash_speed
+			await dash_time.timeout
+			velocity.x = 0
+			is_dashing = false
+	# ----------------------------------------------------
+	# DASH EARLY RETURN (NO GRAVITY / NO INTERRUPT)
+	# ----------------------------------------------------
+	if is_dashing:
+		move_and_slide()
+		return
+
+
+	# ----------------------------------------------------
+	# HORIZONTAL MOVEMENT
+	# ----------------------------------------------------
 	if not attack:
 		if direction != 0:
 			velocity.x = lerp(velocity.x, direction * move_speed, acceleration * delta)
 			if is_on_floor() and anim.current_animation not in ["Land"]:
-				move_speed = 600
 				anim.play("Run")
 		else:
-			# Avoid jitter while airborne
-			if not is_dashing:
-				if is_on_floor():
-					move_speed = 600
-					velocity.x = lerp(velocity.x, 0.0, deceleration * delta)
-				if is_on_floor() and anim.current_animation not in ["Land", "Jump", "Death" , "Dash"]:
+			if is_on_floor():
+				velocity.x = lerp(velocity.x, 0.0, deceleration * delta)
+				if anim.current_animation not in ["Land", "Jump", "Fall", "Dash"]:
 					anim.play("Idle")
 
-	if Input.is_action_pressed("Dash"):
-		if can_dash:
-			print("Dashhh")
-			is_dashing = true
-			can_dash = false
-			anim.play("Dash")
-			dash_cooldown.start()
-			dash_time.start()
-			velocity.y = 0
-			velocity.x = dash_direction * dash_speed
-			await dash_time.timeout
-			print("Donee")
-			velocity.x = 0
+	# RESET AIR DASH ON GROUND
+	if is_on_floor():
+		air_dash_used = false
 
-	# JUMP INPUT
+	# ----------------------------------------------------
+	# JUMP
+	# ----------------------------------------------------
 	if is_on_floor() and Input.is_action_just_pressed("Space") and not attack:
 		$JumpBreath.play()
 		velocity.y = jump_force
 		anim.play("Jump")
-		
 
-	# SMOOTHER GRAVITY HANDLING + AIR CONTROL FIX
+	# ----------------------------------------------------
+	# AIR MOVEMENT + GRAVITY
+	# ----------------------------------------------------
 	if not is_on_floor():
 
-		# -------------------------------
-		# ⭐ AIR MOVEMENT FIX ⭐
-		# Only move in air when A/D is held.
-		# If released, drop straight down.
-		# -------------------------------
 		var air_dir := Input.get_action_strength("D") - Input.get_action_strength("A")
 
 		if air_dir != 0:
 			velocity.x = lerp(velocity.x, air_dir * (move_speed * 0.6), 8 * delta)
 		else:
 			velocity.x = lerp(velocity.x, 0.0, 12 * delta)
-		# -------------------------------
 
+		# gravity
 		if velocity.y < 0:
 			var g = low_gravity if Input.is_action_pressed("Space") else high_gravity
 			if not applied_gravity:
@@ -175,34 +217,34 @@ func _physics_process(delta: float) -> void:
 				velocity.y += gravity * delta
 				applied_gravity = true
 
-	# ANIM WHILE AIRBORNE
-	if not is_on_floor() and not attack:
 		if velocity.y > 0:
 			anim.play("Fall")
 
-	# LAND ANIMATION
+	# ----------------------------------------------------
+	# LAND
+	# ----------------------------------------------------
 	if not was_on_floor and is_on_floor() and velocity.y >= 0:
-		if anim.current_animation not in ["Jump", "Fall", "Hurt"]:
+		if anim.current_animation not in ["Hurt"]:
 			anim.play("Land")
 
 	was_on_floor = is_on_floor()
 
+	# ----------------------------------------------------
 	# ATTACK INPUT
+	# ----------------------------------------------------
 	if Input.is_action_just_pressed("Attack") and not cooldown:
 		attack = true
 		cooldown = true
 
 		$"Attack Cooldown".start()
 		$"Combo Cooldown".start()
+
 		velocity.x = 0
 
 		match combo:
-			0:
-				anim.play("Attack 1")
-			1:
-				anim.play("Attack 2")
-			2:
-				anim.play("Attack 3")
+			0: anim.play("Attack 1")
+			1: anim.play("Attack 2")
+			2: anim.play("Attack 3")
 
 		combo += 1
 		if combo > 2:
@@ -218,7 +260,7 @@ func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 	if anim_name.begins_with("Attack"):
 		attack = false
 		Do_attack()
-		
+
 
 func Do_attack():
 	for area in attack_radius.get_overlapping_areas():
@@ -234,6 +276,7 @@ func Do_attack():
 
 func _on_attack_cooldown_timeout() -> void:
 	cooldown = false
+
 
 func _on_combo_cooldown_timeout() -> void:
 	combo = 0
@@ -296,5 +339,22 @@ func start_invincibility() -> void:
 
 
 func _on_dash_cooldown_timeout() -> void:
-	is_dashing = false
 	can_dash = true
+	is_dashing = false
+
+
+func _on_dustanimation_player_animation_finished(anim_name: StringName) -> void:
+	if anim_name == "Dust":
+		$Dust.visible = false
+		
+		
+func spawn_afterimage():
+	ghost = AfterImage.instantiate()
+	ghost.flip_h = sprite.flip_h
+	ghost.get_child(1)
+	ghost.set_property(position , sprite.scale*2.5)
+	get_parent().add_child(ghost)
+
+
+func _on_ghost_timer_timeout() -> void:
+	spawn_afterimage()

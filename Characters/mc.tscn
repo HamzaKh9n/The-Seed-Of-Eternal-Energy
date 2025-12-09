@@ -1,4 +1,4 @@
-[gd_scene load_steps=83 format=3 uid="uid://3kltsx84mnf6"]
+[gd_scene load_steps=87 format=3 uid="uid://3kltsx84mnf6"]
 
 [ext_resource type="Script" uid="uid://bcy87xyegwsqj" path="res://Characters/mc.gd" id="1_8u11n"]
 [ext_resource type="Texture2D" uid="uid://yurofwp74cre" path="res://Characters/Fighter/Attack_1.png" id="2_y5546"]
@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://bq6co4fwvc1ca" path="res://Characters/Fighter/Shield.png" id="9_a43su"]
 [ext_resource type="Texture2D" uid="uid://qolkodff8wfn" path="res://Characters/Fighter/Walk.png" id="10_q3l62"]
 [ext_resource type="AudioStream" uid="uid://dvejf116lch8v" path="res://Sounds/390768__d00121058__fx_021_breath_jump.wav" id="11_y5546"]
+[ext_resource type="Texture2D" uid="uid://cme5rrrvn61ek" path="res://Global/dust 1.png" id="13_q3l62"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_an5s5"]
 atlas = ExtResource("2_y5546")
@@ -535,6 +536,34 @@ tracks/1/keys = {
 "values": [0, 1, 2, 3]
 }
 
+[sub_resource type="Animation" id="Animation_8fkvj"]
+resource_name = "Dash"
+length = 0.18
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:animation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"Dash"]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1019768),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 2]
+}
+
 [sub_resource type="Animation" id="Animation_u8cqd"]
 resource_name = "Death"
 length = 0.4
@@ -759,34 +788,6 @@ tracks/1/keys = {
 "values": [0, 1, 2, 3, 4, 5, 6, 7]
 }
 
-[sub_resource type="Animation" id="Animation_8fkvj"]
-resource_name = "Dash"
-length = 0.18
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("AnimatedSprite2D:animation")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [&"Dash"]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("AnimatedSprite2D:frame")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.1019768),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [0, 1]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_u8cqd"]
 _data = {
 &"Attack 1": SubResource("Animation_nvv4o"),
@@ -814,6 +815,67 @@ height = 46.0
 radius = 51.188843
 height = 147.87888
 
+[sub_resource type="Animation" id="Animation_6g7wp"]
+resource_name = "Dust"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.6237514, 0.6881243)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0.3762486)]
+}
+
+[sub_resource type="Animation" id="Animation_pyg3m"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_2magj"]
+_data = {
+&"Dust": SubResource("Animation_6g7wp"),
+&"RESET": SubResource("Animation_pyg3m")
+}
+
 [node name="MC" type="CharacterBody2D" groups=["player"]]
 visibility_layer = 2
 collision_layer = 4
@@ -826,6 +888,7 @@ scale = Vector2(0.9372605, 0.94820493)
 sprite_frames = SubResource("SpriteFrames_surwc")
 animation = &"Dash"
 autoplay = "Idle"
+frame = 1
 offset = Vector2(4, 0)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
@@ -867,9 +930,24 @@ shape = SubResource("CapsuleShape2D_a43su")
 [node name="Dash Cooldown" type="Timer" parent="."]
 
 [node name="Dash Time" type="Timer" parent="."]
+wait_time = 0.25
+
+[node name="Dust" type="Sprite2D" parent="."]
+position = Vector2(-39, 24)
+texture = ExtResource("13_q3l62")
+flip_h = true
+
+[node name="DustanimationPlayer" type="AnimationPlayer" parent="Dust"]
+libraries = {
+&"": SubResource("AnimationLibrary_2magj")
+}
+
+[node name="GhostTimer" type="Timer" parent="."]
 wait_time = 0.15
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
 [connection signal="timeout" from="Attack Cooldown" to="." method="_on_attack_cooldown_timeout"]
 [connection signal="timeout" from="Combo Cooldown" to="." method="_on_combo_cooldown_timeout"]
 [connection signal="timeout" from="Dash Cooldown" to="." method="_on_dash_cooldown_timeout"]
+[connection signal="animation_finished" from="Dust/DustanimationPlayer" to="." method="_on_dustanimation_player_animation_finished"]
+[connection signal="timeout" from="GhostTimer" to="." method="_on_ghost_timer_timeout"]

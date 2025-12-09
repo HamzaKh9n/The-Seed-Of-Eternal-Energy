@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cne6e8qupqoob"
-path="res://.godot/imported/Sprout-death.png-fadcb8e218ee6b65572389f71b6319d1.ctex"
+path="res://.godot/imported/Sprout-death.png-7ad313f934ac63436f1eb92b9bc890c8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Characters/Sprout/Sprout-death.png"
-dest_files=["res://.godot/imported/Sprout-death.png-fadcb8e218ee6b65572389f71b6319d1.ctex"]
+source_file="res://Characters/Skeleton_Seeker/Sprout-death.png"
+dest_files=["res://.godot/imported/Sprout-death.png-7ad313f934ac63436f1eb92b9bc890c8.ctex"]
 
 [params]
 

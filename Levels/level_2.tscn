@@ -467,6 +467,14 @@ layer_0/tile_data = PackedInt32Array(655360, 1048576, 805306389, 720896, 1048576
 [node name="MC" parent="." instance=ExtResource("3_rp5ft")]
 position = Vector2(347, -2902)
 scale = Vector2(2.2548895, 2.2548895)
+move_speed = 600.0
+acceleration = 30.0
+deceleration = 25.0
+jump_force = -900.0
+gravity = 3000.0
+low_gravity = 1000.0
+high_gravity = 3000.0
+dash_speed = 1800.0
 
 [node name="Camera2D" type="Camera2D" parent="MC"]
 position = Vector2(0, -25.721878)

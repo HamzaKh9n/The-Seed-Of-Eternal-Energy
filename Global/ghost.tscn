@@ -1,0 +1,58 @@
+[gd_scene load_steps=7 format=3 uid="uid://bb127grtok8ta"]
+
+[ext_resource type="Script" uid="uid://1w7lb2nu1ugx" path="res://ghost.gd" id="1_taae6"]
+[ext_resource type="Texture2D" uid="uid://vdt85iujx2ts" path="res://Global/Run.png" id="1_x224y"]
+[ext_resource type="Texture2D" uid="uid://7bsvajwk6748" path="res://Levels/circle.png" id="3_lxck7"]
+
+[sub_resource type="Animation" id="Animation_x224y"]
+resource_name = "Ghost"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_lxck7"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_qdp11"]
+_data = {
+&"Ghost": SubResource("Animation_x224y"),
+&"RESET": SubResource("Animation_lxck7")
+}
+
+[node name="Ghost" type="Sprite2D"]
+self_modulate = Color(0.011735383, 0.011735383, 0.011735383, 1)
+scale = Vector2(2.3724961, 1.9996821)
+texture = ExtResource("1_x224y")
+script = ExtResource("1_taae6")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_qdp11")
+}
+
+[node name="dot" type="Sprite2D" parent="."]
+position = Vector2(7, 5.0000005)
+scale = Vector2(0.00970547, 0.005986379)
+texture = ExtResource("3_lxck7")
