@@ -1,4 +1,4 @@
-[gd_scene load_steps=80 format=3 uid="uid://3kltsx84mnf6"]
+[gd_scene load_steps=82 format=3 uid="uid://3kltsx84mnf6"]
 
 [ext_resource type="Script" uid="uid://bcy87xyegwsqj" path="res://Characters/mc.gd" id="1_8u11n"]
 [ext_resource type="Texture2D" uid="uid://yurofwp74cre" path="res://Characters/Fighter/Attack_1.png" id="2_y5546"]
@@ -56,6 +56,14 @@ region = Rect2(256, 0, 128, 128)
 [sub_resource type="AtlasTexture" id="AtlasTexture_tum2c"]
 atlas = ExtResource("4_q3l62")
 region = Rect2(384, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a43su"]
+atlas = ExtResource("8_y5546")
+region = Rect2(512, 0, 128, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u8cqd"]
+atlas = ExtResource("8_y5546")
+region = Rect2(640, 0, 128, 128)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_q3l62"]
 atlas = ExtResource("5_a43su")
@@ -266,6 +274,17 @@ animations = [{
 "loop": false,
 "name": &"Attack 3",
 "speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a43su")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u8cqd")
+}],
+"loop": false,
+"name": &"Dash",
+"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -752,8 +771,8 @@ radius = 9.0
 height = 46.0
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_a43su"]
-radius = 59.00475
-height = 284.38248
+radius = 51.188843
+height = 147.87888
 
 [node name="MC" type="CharacterBody2D" groups=["player"]]
 visibility_layer = 2
@@ -765,7 +784,7 @@ script = ExtResource("1_8u11n")
 position = Vector2(-3, 0)
 scale = Vector2(0.9372605, 0.94820493)
 sprite_frames = SubResource("SpriteFrames_surwc")
-animation = &"Attack 1"
+animation = &"Dash"
 autoplay = "Idle"
 frame = 1
 offset = Vector2(4, 0)
@@ -802,7 +821,7 @@ shape = SubResource("CapsuleShape2D_y5546")
 position = Vector2(0, 17)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AttackRadius"]
-position = Vector2(17.999998, 7)
+position = Vector2(12, 6)
 scale = Vector2(0.54232925, 0.17581955)
 shape = SubResource("CapsuleShape2D_a43su")
 

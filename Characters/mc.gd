@@ -9,23 +9,23 @@ extends CharacterBody2D
 @export var jump_force := -900.0
 @export var gravity := 3000.0
 
-# Hollow Knight variable jump (FIXED)
-@export var low_gravity := 1000.0   ### FIXED (was too low)
-@export var high_gravity := 3000.0 ### FIXED (better cutoff)
+@export var low_gravity := 1000.0
+@export var high_gravity := 3000.0
 
 @onready var cam = $Camera2D
 @onready var anim = $AnimationPlayer
 @onready var sprite = $AnimatedSprite2D
 @onready var attack_radius = $AttackRadius
+@onready var fixed_scale = scale.x
 
 # -----------------------------------------------------
 # STATES
 # -----------------------------------------------------
 var was_on_floor := false
-var attack = false
+var attack = false 
 var cooldown = false
 var combo = 0
-
+var flipped = false
 var is_hurt: bool = false
 var hurt_duration: float = 0.25
 var hurt_timer: float = 0.0
@@ -41,12 +41,20 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	# Prevent double gravity application
+	var applied_gravity := false
+
 	if Global.stop:
-		anim.play('Idle')
+		anim.play("Idle")
+		velocity.x = 0
 		if not is_on_floor():
-			velocity.y = gravity * delta
+			if not applied_gravity:
+				velocity.y += gravity * delta
+				applied_gravity = true
+		move_and_slide()
 		return
 		
+	# PLAYER DEATH
 	if Global.health <= 0:
 		anim.play("Death")
 		var tree = get_tree()
@@ -59,114 +67,108 @@ func _physics_process(delta: float) -> void:
 		print(level)
 		match level:
 			1:
-				await tree.process_frame
+				await Global.safe_frame()
 				tree.change_scene_to_file("res://Levels/level_1.tscn")
 			2:
-				await tree.process_frame
+				await Global.safe_frame()
 				tree.change_scene_to_file("res://Levels/level_2.tscn")
 
 			3:
-				await tree.process_frame
+				await Global.safe_frame()
 				tree.change_scene_to_file("res://Emperor's Grave Scenes/graves.tscn")
-	# -----------------------------------------------------
-	# Handle Hurt State First
-	# -----------------------------------------------------
+		return
+
+	# HURT STATE
 	if is_hurt:
 		hurt_timer -= delta
-		# soft stop
 		velocity.x = lerp(velocity.x, 0.0, 6.0 * delta)
-		velocity.y += gravity * delta
+
+		if not applied_gravity:
+			velocity.y += gravity * delta
+			applied_gravity = true
 
 		if hurt_timer <= 0:
 			is_hurt = false
+
 		move_and_slide()
 		return
 
+	# HORIZONTAL MOVEMENT
+	var dir_right := 1 if Input.is_action_pressed("D") else 0
+	var dir_left := 1 if Input.is_action_pressed("A") else 0
+	var direction := dir_right - dir_left
 
-	# -----------------------------------------------------
-	# HORIZONTAL INPUT
-	# -----------------------------------------------------
-	var direction := 0
-	if Input.is_action_pressed("A"):
-		direction = -1
-	elif Input.is_action_pressed("D"):
-		direction = 1
-
-	# Flip sprite
-	if direction != 0 and not attack:  ### FIXED (attack no flip)
+	if direction != 0 and not attack:
 		sprite.flip_h = direction < 0
 
-
-	# -----------------------------------------------------
-	# HORIZONTAL MOVEMENT
-	# -----------------------------------------------------
-	if not attack: ### FIXED (movement disabled only during attack)
+	if not attack:
 		if direction != 0:
 			velocity.x = lerp(velocity.x, direction * move_speed, acceleration * delta)
 			if is_on_floor() and anim.current_animation not in ["Land"]:
+				move_speed = 600
 				anim.play("Run")
 		else:
-			velocity.x = lerp(velocity.x, 0.0, deceleration * delta)
-			if is_on_floor() and anim.current_animation not in ["Land", "Jump" , "Death"]:
+			# Avoid jitter while airborne
+			if is_on_floor():
+				move_speed = 600
+				velocity.x = lerp(velocity.x, 0.0, deceleration * delta)
+			if is_on_floor() and anim.current_animation not in ["Land", "Jump", "Death"]:
 				anim.play("Idle")
 
-
-	# -----------------------------------------------------
-	# JUMP
-	# -----------------------------------------------------
+	# JUMP INPUT
 	if is_on_floor() and Input.is_action_just_pressed("Space") and not attack:
 		$JumpBreath.play()
 		anim.play("Jump")
-		velocity.y = jump_force  
+		velocity.y = jump_force
 
-
-	# -----------------------------------------------------
-	# VARIABLE JUMP (HOLLOW KNIGHT FIXED)
-	# -----------------------------------------------------
+	# SMOOTHER GRAVITY HANDLING + AIR CONTROL FIX
 	if not is_on_floor():
-		if velocity.y < 0:  # rising
-			if Input.is_action_pressed("Space"):
-				velocity.y += low_gravity * delta
-			else:
-				velocity.y += high_gravity * delta
+
+		# -------------------------------
+		# ⭐ AIR MOVEMENT FIX ⭐
+		# Only move in air when A/D is held.
+		# If released, drop straight down.
+		# -------------------------------
+		var air_dir := Input.get_action_strength("D") - Input.get_action_strength("A")
+
+		if air_dir != 0:
+			velocity.x = lerp(velocity.x, air_dir * (move_speed * 0.6), 8 * delta)
 		else:
-			velocity.y += gravity * delta
+			velocity.x = lerp(velocity.x, 0.0, 12 * delta)
+		# -------------------------------
 
+		if velocity.y < 0:
+			var g = low_gravity if Input.is_action_pressed("Space") else high_gravity
+			if not applied_gravity:
+				velocity.y += g * delta
+				applied_gravity = true
+		else:
+			if not applied_gravity:
+				velocity.y += gravity * delta
+				applied_gravity = true
 
-	# -----------------------------------------------------
-	# AIR ANIMATIONS PRIORITY
-	# -----------------------------------------------------
+	# ANIM WHILE AIRBORNE
 	if not is_on_floor() and not attack:
 		if velocity.y > 0:
 			anim.play("Fall")
 		elif velocity.y < 0:
 			anim.play("Jump")
 
-
-	# -----------------------------------------------------
-	# LANDING
-	# -----------------------------------------------------
+	# LAND ANIMATION
 	if not was_on_floor and is_on_floor() and velocity.y >= 0:
 		if anim.current_animation not in ["Jump", "Fall", "Hurt"]:
 			anim.play("Land")
 
 	was_on_floor = is_on_floor()
 
-
-	# -----------------------------------------------------
-	# ATTACK FIXED ENTIRELY
-	# -----------------------------------------------------
+	# ATTACK INPUT
 	if Input.is_action_just_pressed("Attack") and not cooldown:
-
 		attack = true
 		cooldown = true
 
 		$"Attack Cooldown".start()
 		$"Combo Cooldown".start()
-
-		# freeze movement
 		velocity.x = 0
-
 
 		match combo:
 			0:
@@ -176,29 +178,19 @@ func _physics_process(delta: float) -> void:
 			2:
 				anim.play("Attack 3")
 
-		# apply push direction
-
 		combo += 1
 		if combo > 2:
 			combo = 0
 
-	# -----------------------------------------------------
-	# MOVE
-	# -----------------------------------------------------
 	move_and_slide()
 
 
-
-# -----------------------------------------------------
-# ANIMATION FINISHED
-# -----------------------------------------------------
 func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 	if anim_name == "Land":
 		anim.play("Idle")
 
-	if anim_name.begins_with("Attack"):  ### FIXED
+	if anim_name.begins_with("Attack"):
 		attack = false
-		move_speed = 600
 		Do_attack()
 		
 
@@ -206,120 +198,72 @@ func Do_attack():
 	for area in attack_radius.get_overlapping_areas():
 		if area.is_in_group("EnemyHitbox"):
 			var enemy = area.get_parent()
-
-			# Deal damage
 			enemy.take_damage(Global.Power)
-
-			# Player knockback (small, controlled)
 			var dir_to_enemy: float = sign(enemy.global_position.x - global_position.x)
 			var knock_force: float = 150.0
-
 			velocity.x = -dir_to_enemy * knock_force
-
 			shake_camera(0.25, 18)
 			await pause_brief(0.05, 0.25)
 
 
-		
-
-# -----------------------------------------------------
-# ATTACK COOLDOWNS
-# -----------------------------------------------------
 func _on_attack_cooldown_timeout() -> void:
 	cooldown = false
-
 
 func _on_combo_cooldown_timeout() -> void:
 	combo = 0
 
 
-# -----------------------------------------------------
-# DAMAGE / KNOCKBACK
-# (unchanged)
-# -----------------------------------------------------
 func take_damage(amount, dir, power) -> void:
 	if can_hurt:
 		Global.health -= amount
-
 		var knock_dir := signi(dir)
 		if knock_dir == 0:
 			knock_dir = 1
-
 		is_hurt = true
 		hurt_timer = hurt_duration
-
-		# --- FIX 1: Clamp power so it NEVER becomes crazy ---
 		var k_power := clampf(power, 200, 800)
-
-		# --- FIX 2: Apply strong knockback instantly (frame perfect) ---
 		velocity = Vector2(knock_dir * k_power, -k_power * 0.15)
-
 		anim.play("Hurt")
 		shake_camera(0.25, 18)
-
-		# --- FIX 3: Small freeze frame for impact ---
 		await pause_brief(0.05, 0.1)
-
-		# --- FIX 4: DO NOT cancel velocity here ---
-		# Do NOT reset velocity.x = 0  (this kills knockback)
 		can_hurt = false
 		start_invincibility()
 
 
-
-# CAMERA SHAKE (unchanged)
 func shake_camera(duration: float = 0.5, magnitude: float = 8.0) -> void:
 	var original_mode = cam.process_mode
 	cam.process_mode = Node.PROCESS_MODE_ALWAYS
-
 	var original_pos = cam.position
 	var timer = 0.0
-
 	while timer < duration:
 		cam.position = original_pos + Vector2(randf_range(-magnitude, magnitude), randf_range(-magnitude, magnitude))
-		await get_tree().process_frame
+		await Global.safe_frame()
 		timer += 0.016
-
 	cam.position = original_pos
 	cam.process_mode = original_mode
 
 
 var _is_time_scaled := false
-
-
 func pause_brief(duration: float, slow: float = 0.1) -> void:
-	# Prevent overlapping slow-mo
 	if _is_time_scaled:
 		return
-	
 	_is_time_scaled = true
-
 	var original := Engine.time_scale
 	Engine.time_scale = slow
-
-	# Use a timer that does NOT depend on time_scale
 	await get_tree().create_timer(duration, false, true).timeout
-
 	Engine.time_scale = original
 	_is_time_scaled = false
 
 
-
-# -----------------------------------------------------
-# INVINCIBILITY FLASH
-# -----------------------------------------------------
 func start_invincibility() -> void:
 	if can_hurt:
 		return
-
 	var timer = 0.0
-
 	while timer < invincible_time:
 		sprite.modulate = Color(1, 1, 1, 1)
 		await get_tree().create_timer(flash_speed).timeout
 		sprite.modulate = Color(1, 1, 1, 0.4)
 		await get_tree().create_timer(flash_speed).timeout
 		timer += flash_speed * 2
-
 	sprite.modulate = Color(1, 1, 1, 1)
 	can_hurt = true

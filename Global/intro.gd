@@ -11,6 +11,14 @@ func _ready() -> void:
 			text.modulate.a = 0
 	
 
+func _process(delta: float) -> void:
+	if Input.is_action_pressed("ui_accept"):
+		shown = 12
+	if shown >= 12:
+		SaveGame.data.Intro = true
+		SaveGame.save_game()
+		get_tree().change_scene_to_file("res://Levels/level_1.tscn")
+
 
 func fade_in_label(label: RichTextLabel, duration := 4.0):
 	label.modulate.a = 0
@@ -41,5 +49,3 @@ func _on_start_timeout() -> void:
 			await fade_in_label(text)
 		if shown%4 == 0:
 			await fade_out_container(box)
-	if shown >= 12:
-		get_tree().change_scene_to_file("res://Levels/level_1.tscn")
