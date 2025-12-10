@@ -474,6 +474,7 @@ position = Vector2(575, 346)
 scale = Vector2(2.2548895, 2.2548895)
 
 [node name="Camera2D" type="Camera2D" parent="MC"]
+process_mode = 3
 position = Vector2(0, -25.721878)
 scale = Vector2(0.5488301, 0.5488301)
 zoom = Vector2(0.65, 0.65)
@@ -481,6 +482,8 @@ limit_left = 0
 limit_top = -2925
 limit_right = 5350
 limit_bottom = 2400
+position_smoothing_speed = 50.0
+rotation_smoothing_speed = 50.0
 
 [node name="CROSSROADS" type="AudioStreamPlayer2D" parent="MC"]
 process_mode = 3

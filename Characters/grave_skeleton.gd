@@ -25,12 +25,13 @@ var has_dropped = false
 # -----------------------------
 #       KNOCKBACK / STUN SYSTEM
 # -----------------------------
-var knockback := true
+var knockback := false
 var knockback_force := Vector2.ZERO
 var knockback_duration := 0.2
 var knockback_timer := 0.0
 
 var stunned := false
+var can_stun := false
 var stun_time := 0.0
 var stun_timer := 0.0
 
@@ -58,7 +59,7 @@ func _physics_process(delta: float) -> void:
 		else:
 			anim.play("Nothing")
 		if not is_on_floor():
-			velocity.y = gravity * delta
+			velocity.y += gravity * delta
 		return
 
 	# Gravity
@@ -88,7 +89,7 @@ func _physics_process(delta: float) -> void:
 	# -----------------------------
 	#      STUN LOGIC
 	# -----------------------------
-	if stunned:
+	if stunned and can_stun:
 		stun_timer -= delta
 		velocity = Vector2.ZERO
 		if not is_on_floor():
@@ -97,6 +98,8 @@ func _physics_process(delta: float) -> void:
 			stunned = false
 		move_and_slide()
 		return
+
+
 
 
 	# -----------------------------
@@ -179,11 +182,6 @@ func spawn_skeleton():
 	anim.play("Spawn")
 	await anim.animation_finished
 
-	chase_area.area_entered.connect(_on_chase_entered)
-	chase_area.area_exited.connect(_on_chase_exited)
-	detect_area.area_exited.connect(_on_detect_exited)
-	hitbox_area.area_entered.connect(_on_hitbox_entered)
-
 	for area in chase_area.get_overlapping_areas():
 		if area.is_in_group("PlayerHitbox"):
 			_on_chase_entered(area)
@@ -191,6 +189,13 @@ func spawn_skeleton():
 	Global.encounters += 1
 	spawning = false
 	spawned = true
+	
+	await Global.safe_frame()
+	
+	chase_area.area_entered.connect(_on_chase_entered)
+	chase_area.area_exited.connect(_on_chase_exited)
+	detect_area.area_exited.connect(_on_detect_exited)
+	hitbox_area.area_entered.connect(_on_hitbox_entered)
 
 
 # -----------------------------
@@ -238,11 +243,15 @@ func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 #       DAMAGE & KNOCKBACK
 # -----------------------------
 func take_damage(amount):
-	health -= amount
-	anim.play("Damage")
-	print(health)
-	
 	if spawned:
+		health -= amount
+
+		# Do NOT interrupt attack animation
+		if anim.current_animation != "Attack":
+			anim.play("Damage")
+
+		print(health)
+
 		if knockback and anim.current_animation != "Attack":
 			var dir = sign(player_area.get_parent().global_position.x - global_position.x)
 			knockback_force = Vector2(-dir * 600, -150)
@@ -256,7 +265,6 @@ func _on_spawn_area_entered(area):
 	if area.is_in_group("PlayerHitbox"):
 		if not spawned:
 			spawn_skeleton()
-			spawned = true
 
 
 func _on_attack_cooldown_timeout() -> void:

@@ -141,6 +141,7 @@ func _physics_process(delta: float) -> void:
 			is_dashing = true
 			can_dash = false
 			
+			
 			if is_dashing:
 				spawn_afterimage()
 
@@ -151,6 +152,7 @@ func _physics_process(delta: float) -> void:
 			anim.play("Dash")
 			$Dust.visible = true
 			$Dust/DustanimationPlayer.play("Dust")
+			$Dust/CPUParticles2D.emitting = true
 			
 			dash_cooldown.start()
 			dash_time.start()
@@ -351,10 +353,16 @@ func _on_dustanimation_player_animation_finished(anim_name: StringName) -> void:
 func spawn_afterimage():
 	ghost = AfterImage.instantiate()
 	ghost.flip_h = sprite.flip_h
-	ghost.get_child(1)
+	var dot_right = ghost.get_child(1)
+	var dot_left = ghost.get_child(2)
+	dot_left.visible = sprite.flip_h
+	dot_right.visible = !sprite.flip_h
+	
 	ghost.set_property(position , sprite.scale*2.5)
 	get_parent().add_child(ghost)
+	$GhostTimer.start()
 
 
 func _on_ghost_timer_timeout() -> void:
-	spawn_afterimage()
+	if is_dashing:
+		spawn_afterimage()

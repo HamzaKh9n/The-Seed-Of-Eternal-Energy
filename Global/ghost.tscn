@@ -52,7 +52,14 @@ libraries = {
 &"": SubResource("AnimationLibrary_qdp11")
 }
 
-[node name="dot" type="Sprite2D" parent="."]
+[node name="dotright" type="Sprite2D" parent="."]
+visible = false
 position = Vector2(7, 5.0000005)
-scale = Vector2(0.00970547, 0.005986379)
+scale = Vector2(0.013565095, 0.008367014)
+texture = ExtResource("3_lxck7")
+
+[node name="dotleft" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(-7.586946, 5.000795)
+scale = Vector2(0.013694684, 0.008446945)
 texture = ExtResource("3_lxck7")
