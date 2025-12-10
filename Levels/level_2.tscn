@@ -714,3 +714,5 @@ scale = Vector2(2.1068878, 2.1068878)
 text = "Quit"
 
 [connection signal="area_entered" from="S1" to="." method="_on_s_1_area_entered"]
+[connection signal="pressed" from="Pause menu/Resume" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="Pause menu/Quit" to="." method="_on_quit_pressed"]
