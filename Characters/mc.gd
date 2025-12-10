@@ -8,6 +8,7 @@ extends CharacterBody2D
 @export var deceleration := 25.0
 @export var jump_force := -900.0
 @export var gravity := 3000.0
+@export var ghost_scale : float
 
 @export var low_gravity := 1000.0
 @export var high_gravity := 3000.0
@@ -363,7 +364,7 @@ func spawn_afterimage():
 	dot_left.visible = sprite.flip_h
 	dot_right.visible = !sprite.flip_h
 	
-	ghost.set_property(position , sprite.scale*2.5)
+	ghost.set_property(position , sprite.scale*ghost_scale)
 	get_parent().add_child(ghost)
 	$GhostTimer.start()
 
