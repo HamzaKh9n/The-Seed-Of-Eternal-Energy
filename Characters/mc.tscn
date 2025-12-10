@@ -931,7 +931,7 @@ shape = SubResource("CapsuleShape2D_a43su")
 [node name="Dash Cooldown" type="Timer" parent="."]
 
 [node name="Dash Time" type="Timer" parent="."]
-wait_time = 0.25
+wait_time = 0.35
 
 [node name="Dust" type="Sprite2D" parent="."]
 z_index = 15
