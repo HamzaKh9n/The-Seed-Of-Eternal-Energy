@@ -9,16 +9,13 @@ var input_paused = false
 
 func _ready() -> void:
 	SaveGame.load_game()
+	Global.stop = false
 
-	Global.Level = SaveGame.data.level
-	Global.frags = SaveGame.data.frags
-	Global.health = SaveGame.data.player_health
-	Global.checkpoint = SaveGame.data.checkpoint
-	Global.deaths = SaveGame.data.Deaths
-	Global.EnergyCollected = SaveGame.data.EnergyTaken
-	Global.EnemyKilled = SaveGame.data.EnemyKilled
+	Global.Level = 2
+	print("Level" , Global.Level)
+	SaveGame.save_game()
 
-	input_paused = true
+	#input_paused = true
 	Engine.time_scale = 1.4
 	fade_rect.modulate.a = 1.0
 	fade_in()
@@ -57,7 +54,6 @@ func fade_out_and_change_scene(path: String) -> void:
 # ======================================================
 func handle_player_death() -> void:
 	Global.stop = true
-	Global.health = 100
 	Global.frags = max(Global.frags - 3, 0)
 	Global.EnergyCollected.clear()
 	Global.EnemyKilled.clear()
@@ -67,6 +63,8 @@ func handle_player_death() -> void:
 	SaveGame.data.Deaths = Global.deaths
 	await SaveGame.save_game()
 
+	Global.health = 100
+	
 	# --- WARNINGS BASED ON DEATHS ---
 	if Global.deaths == 1:
 		await $DialogBox.enqueue("Be careful... You only get a few chances in this level.")
@@ -130,5 +128,4 @@ func _on_resume_pressed() -> void:
 
 func _on_quit_pressed() -> void:
 	toggle_pause()
-	SaveGame.save_game()
 	get_tree().change_scene_to_file("res://Title/title.tscn")

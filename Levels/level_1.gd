@@ -8,20 +8,10 @@ var portal_interactions = 0
 var input_paused = false
 
 func _ready() -> void:
+	Global.stop = false
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	SaveGame.load_game()
-
-	Global.Level = SaveGame.data.level
-	Global.frags = SaveGame.data.frags
-	Global.health = SaveGame.data.player_health
-	Global.checkpoint = SaveGame.data.checkpoint
-	Global.deaths = SaveGame.data.Deaths
-	Global.EnergyCollected = SaveGame.data.EnergyTaken
-	Global.EnemyKilled = SaveGame.data.EnemyKilled
-
-	# ONLY RESET INTRO SHOWN WHEN COMING FROM TITLE
-	# NOTE: SaveGame resets this automatically on Title.
-
+	Global.Level = 1
+	SaveGame.save_game()
 	input_paused = true
 	Engine.time_scale = 1.2
 	fade_rect.modulate.a = 1.0
@@ -36,6 +26,7 @@ func fade_in() -> void:
 	tween.tween_property(fade_rect, "modulate:a", 0.0, 4.0)
 	tween.set_trans(Tween.TRANS_SINE)
 	tween.set_ease(Tween.EASE_IN_OUT)
+	Global.stop = false
 
 func _process(_delta: float) -> void:
 
@@ -50,9 +41,13 @@ func _process(_delta: float) -> void:
 			Global.Level1IntroShown = true  # <-- NEVER SHOW AGAIN in this run
 			await $DialogBox.enqueue("Welcome To Level 1")
 			await $DialogBox.enqueue("Collect All Energy Fragments and Find the Exit to move on Next Level")
+	
+	if Global.Level1IntroShown:
+		input_paused = false
+		
 
 	# ENCOUNTER DIALOG
-	if SaveGame.data.Deaths < 1:
+	if SaveGame.data.deaths < 1:
 		if Global.encounters == 1 and not encounter_dialog_shown:
 			encounter_dialog_shown = true
 			await $DialogBox.enqueue("The Enemies also drop Energy Fragments. Slay them if you can't find enough.")
@@ -96,7 +91,6 @@ func _on_resume_pressed() -> void:
 
 func _on_quit_pressed() -> void:
 	toggle_pause()
-	SaveGame.save_game()
 	get_tree().change_scene_to_file("res://Title/title.tscn")
 
 func _on_tp_area_entered(area: Area2D) -> void:

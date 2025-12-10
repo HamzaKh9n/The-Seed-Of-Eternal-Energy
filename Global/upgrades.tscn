@@ -1,0 +1,103 @@
+[gd_scene load_steps=4 format=3 uid="uid://dp4nqyc5jv0vq"]
+
+[ext_resource type="Script" uid="uid://hakcwseodrd1" path="res://Global/upgrades.gd" id="1_x6nfr"]
+[ext_resource type="FontFile" uid="uid://ws62klh1aula" path="res://Global/RasterForgeRegular-JpBgm.ttf" id="2_4tqvq"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_586pb"]
+bg_color = Color(0, 0, 0, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(1, 1, 1, 1)
+expand_margin_left = 18.0
+expand_margin_top = 18.0
+expand_margin_right = 18.0
+expand_margin_bottom = 18.0
+
+[node name="Upgrades" type="CanvasLayer" groups=["upgrades"]]
+process_mode = 3
+visible = false
+script = ExtResource("1_x6nfr")
+
+[node name="Panel" type="Panel" parent="."]
+offset_left = 334.0
+offset_top = 124.0
+offset_right = 1394.0
+offset_bottom = 318.0
+scale = Vector2(0.4891554, 0.4891554)
+theme_override_styles/panel = SubResource("StyleBoxFlat_586pb")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+offset_left = 334.0
+offset_top = 124.0
+offset_right = 1394.0
+offset_bottom = 318.0
+scale = Vector2(0.4891554, 0.4891554)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Choice1" type="Button" parent="HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 194)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_4tqvq")
+theme_override_font_sizes/font_size = 43
+
+[node name="Panel2" type="Panel" parent="."]
+offset_left = 334.0
+offset_top = 263.0
+offset_right = 1394.0
+offset_bottom = 457.0
+scale = Vector2(0.4891554, 0.4891554)
+theme_override_styles/panel = SubResource("StyleBoxFlat_586pb")
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="."]
+offset_left = 334.0
+offset_top = 263.0
+offset_right = 1394.0
+offset_bottom = 457.0
+scale = Vector2(0.4891554, 0.4891554)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Choice2" type="Button" parent="HBoxContainer2/VBoxContainer"]
+custom_minimum_size = Vector2(0, 194)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_4tqvq")
+theme_override_font_sizes/font_size = 43
+
+[node name="Panel3" type="Panel" parent="."]
+offset_left = 334.0
+offset_top = 402.0
+offset_right = 1394.0
+offset_bottom = 596.0
+scale = Vector2(0.4891554, 0.4891554)
+theme_override_styles/panel = SubResource("StyleBoxFlat_586pb")
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="."]
+offset_left = 334.0
+offset_top = 402.0
+offset_right = 1394.0
+offset_bottom = 596.0
+scale = Vector2(0.4891554, 0.4891554)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Choice3" type="Button" parent="HBoxContainer3/VBoxContainer"]
+custom_minimum_size = Vector2(0, 194)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_4tqvq")
+theme_override_font_sizes/font_size = 43
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+max_polyphony = 1000
+
+[connection signal="pressed" from="HBoxContainer/VBoxContainer/Choice1" to="." method="_on_choice_1_pressed"]
+[connection signal="pressed" from="HBoxContainer2/VBoxContainer/Choice2" to="." method="_on_choice_2_pressed"]
+[connection signal="pressed" from="HBoxContainer3/VBoxContainer/Choice3" to="." method="_on_choice_3_pressed"]

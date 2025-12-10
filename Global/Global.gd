@@ -4,7 +4,7 @@ var max_health = 100
 var health = 100
 var frags = 0
 var Power = 25
-var Level = 1
+var Level = 0
 var max_frags = 10
 var stop = false
 var encounters = 0
@@ -17,6 +17,80 @@ var Intro = false
 var Level1IntroShown := false
 var just_reloaded = false
 
+# Upgrades and Powerups
+var upgrades = []
+var upgrade = null
+var knockback = false
+var stun = false
+var dash = false
+var ragemode = false
+var lifesteal = false
+var damage = false
+var heal = false
+
+
+
+var upgrade1 = false
+
+@onready var upgrade_scene = preload("res://Global/upgrades.tscn")
+@onready var messagebox = preload("res://Global/messages.tscn")
+var message = null
+
+func _ready() -> void:
+	for x in Global.upgrades:
+		match x:
+			"knockback":
+				knockback = true
+			"stun":
+				stun = true
+			"dash":
+				dash = true
+			"lifesteal":
+				lifesteal = true
+			"ragemode":
+				ragemode = true
+			"damage":
+				damage = true
+				Global.Power = 34
+			"heal":
+				heal = true
+
+
+
+func _process(_delta: float) -> void:
+	if upgrade != null:
+		upgrades.append(upgrade)
+		give_powerup(upgrade)
+		upgrade = null
+		message = messagebox.instantiate()
+		add_child(message)
+		message.show_message("Powered Up...." ,1 , true)
+	
+	if Global.frags == 5 and not upgrade1:
+		upgrade1 = true
+		get_tree().get_first_node_in_group("upgrades").create_upgrades(["Healing" , "Heal 20% Health with Energies" , "heal"] , ["Damage" , "Increase Damage" , "damage"] , ["Knockback" , "" , "knockback"])
+	
+
+func give_powerup(x):
+	match x:
+		"knockback":
+			knockback = true
+		"stun":
+			stun = true
+		"dash":
+			dash = true
+		"lifesteal":
+			lifesteal = true
+		"ragemode":
+			ragemode = true
+		"damage":
+			damage = true
+			Global.Power = 34
+		"heal":
+			heal = true
+	print("Upgraded" , x )
+	stop = false
+	#message.hide_message()
 
 func _input(event):
 	if event is InputEventKey and event.pressed and event.keycode == KEY_F11:

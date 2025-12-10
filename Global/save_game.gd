@@ -1,19 +1,23 @@
 extends Node
 
-const SAVE_PATH := "user://savegame1.json"
+const SAVE_PATH := "user://savegame2.json"
 
 var data := {
-	"level" : 1,
-	"frags" : 0,
-	"player_health" : 100,
-	"checkpoint" : "",
-	"Deaths" : 0,
-	"EnergyTaken":[],
-	"EnemyKilled":[],
-	"Intro" : false,
+	"level":Global.Level,
+	"frags":Global.frags,
+	"deaths":Global.deaths,
+	"upgrades":Global.upgrades
 }
 
 func save_game():
+	
+	data = {
+		"level":Global.Level,
+		"frags":Global.frags,
+		"deaths":Global.deaths,
+		"upgrades":Global.upgrades
+	}
+	
 	var file = FileAccess.open(SAVE_PATH, FileAccess.WRITE)
 	file.store_string(JSON.stringify(data))
 	file.close()
@@ -33,6 +37,8 @@ func load_game():
 	var loaded_data = JSON.parse_string(content)
 	if loaded_data:
 		data = loaded_data
+		for i in data.upgrades:
+			print(i)
 		print("Game Loaded")
 	else:
 		print("Error loading save (corrupted file). Resetting...")
@@ -40,14 +46,16 @@ func load_game():
 
 
 func reset_game():
+	Global.Level = 0
+	Global.frags = 0
+	Global.deaths = 0
+	Global.upgrades = []
+	
 	data = {
-		"level" : 1,
-		"frags" : 0,
-		"player_health" : 100,
-		"checkpoint" : "",
-		"Deaths" : 0,
-		"EnergyTaken":[],
-		"EnemyKilled":[],
-		"Intro":false,
+		"level":Global.Level,
+		"frags":Global.frags,
+		"deaths":Global.deaths,
+		"upgrades":Global.upgrades
 	}
+	
 	save_game()

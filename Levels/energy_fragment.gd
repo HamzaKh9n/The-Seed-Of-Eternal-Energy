@@ -33,9 +33,10 @@ func _process(delta):
 			queue_free()
 			collected = true
 			Global.frags += 1
-			Global.health += 20
-			if Global.health > 100:
-				Global.health = 100
+			if Global.heal:
+				Global.health += 20
+				if Global.health > 100:
+					Global.health = 100
 			print(Global.frags)
 
 func _on_area_entered(area: Area2D):

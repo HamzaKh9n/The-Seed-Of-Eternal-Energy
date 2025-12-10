@@ -71,6 +71,8 @@ func _physics_process(delta: float) -> void:
 
 	# PLAYER DEATH
 	if Global.health <= 0:
+		Global.deaths += 1
+		SaveGame.save_game()
 		anim.play("Death")
 		var tree = get_tree()
 		await anim.animation_finished
@@ -129,7 +131,7 @@ func _physics_process(delta: float) -> void:
 	# ----------------------------------------------------
 	# DASH INPUT (FIXED — WORKS ANY TIME)
 	# ----------------------------------------------------
-	if Input.is_action_just_pressed("Dash") and not attack:
+	if Input.is_action_just_pressed("Dash") and not attack and Global.dash:
 		var allow_dash := false
 
 		if is_on_floor():
@@ -269,6 +271,8 @@ func Do_attack():
 		if area.is_in_group("EnemyHitbox"):
 			var enemy = area.get_parent()
 			enemy.take_damage(Global.Power)
+			if Global.lifesteal:
+				Global.health += Global.power * 0.25
 			var dir_to_enemy: float = sign(enemy.global_position.x - global_position.x)
 			var knock_force: float = 150.0
 			velocity.x = -dir_to_enemy * knock_force
@@ -338,6 +342,7 @@ func start_invincibility() -> void:
 		timer += flash_speed * 2
 	sprite.modulate = Color(1, 1, 1, 1)
 	can_hurt = true
+	velocity.x = 0
 
 
 func _on_dash_cooldown_timeout() -> void:

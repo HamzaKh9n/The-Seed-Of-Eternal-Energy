@@ -23,9 +23,9 @@ var spawned = false
 var has_dropped = false
 
 # -----------------------------
-#       KNOCKBACK / STUN SYSTEM
+#       Global.knockback / STUN SYSTEM
 # -----------------------------
-var knockback := false
+#var Global.knockback := false
 var knockback_force := Vector2.ZERO
 var knockback_duration := 0.2
 var knockback_timer := 0.0
@@ -103,7 +103,7 @@ func _physics_process(delta: float) -> void:
 
 
 	# -----------------------------
-	#      KNOCKBACK LOGIC
+	#      Global.knockback LOGIC
 	# -----------------------------
 	if knockback_timer > 0:
 		knockback_timer -= delta
@@ -231,7 +231,7 @@ func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 	elif anim_name == "Attack":
 		for area in attack_area.get_overlapping_areas():
 			if area.is_in_group("PlayerHitbox"):
-				area.get_parent().take_damage(10, area.get_parent().global_position.x - global_position.x, 1500)
+				area.get_parent().take_damage(10, area.get_parent().global_position.x - global_position.x, 2500)
 
 		# REAL FIX — cooldown reliably restarts
 		can_attack = false
@@ -252,13 +252,15 @@ func take_damage(amount):
 
 		print(health)
 
-		if knockback and anim.current_animation != "Attack":
+		if Global.knockback:
 			var dir = sign(player_area.get_parent().global_position.x - global_position.x)
 			knockback_force = Vector2(-dir * 600, -150)
 			knockback_timer = knockback_duration
-
-			stunned = true
-			stun_timer = stun_time
+			
+			if can_stun:
+				stunned = true
+				stun_time = 0.2
+				stun_timer = stun_time
 
 
 func _on_spawn_area_entered(area):

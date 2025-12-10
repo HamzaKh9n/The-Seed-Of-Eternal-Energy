@@ -2,6 +2,7 @@ extends CanvasLayer
 
 @onready var label: RichTextLabel = $HBoxContainer/VBoxContainer/RichTextLabel
 @onready var type_sound: AudioStreamPlayer2D = $AudioStreamPlayer2D
+@onready var messagebox = preload("res://Global/messages.tscn")
 
 var char_speed: float = 0.02
 
@@ -10,6 +11,7 @@ var _running := false
 var _skip := false
 var _typing := false
 var _current_non_skippable := false
+var message = null
 
 # ----------------------------------------------------
 # PUBLIC: Call this from anywhere
@@ -62,7 +64,11 @@ func _show_and_type(text: String, non_skippable := false) -> void:
 	_skip = false
 	_typing = true
 	_current_non_skippable = non_skippable
-
+	if not _current_non_skippable:
+		message = messagebox.instantiate()
+		add_child(message)
+		message.show_message("Press Space to Skip" , 0.5)
+		
 	label.clear()
 	label.bbcode_enabled = true
 	label.bbcode_text = text
@@ -124,3 +130,5 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	if event.is_action_pressed("ui_accept"):
 		_skip = true    # Skip OR close
+		message.hide_message()
+		

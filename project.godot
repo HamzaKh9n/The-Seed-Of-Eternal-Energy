@@ -35,6 +35,7 @@ PlayerHitbox=""
 Entity=""
 EnemyHitbox=""
 DialogBox=""
+upgrades=""
 
 [input]
 
