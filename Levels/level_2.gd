@@ -103,3 +103,32 @@ func handle_player_death() -> void:
 	get_tree().reload_current_scene()
 
 	Global.stop = false
+
+
+
+func _input(event):
+	if event.is_action_pressed("ui_cancel"):
+		toggle_pause()
+	elif input_paused:
+		Global.stop = true
+		get_viewport().set_input_as_handled()
+
+func toggle_pause():
+	paused = !paused
+	get_tree().paused = paused
+	$"Pause menu".visible = paused
+	if paused:
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		#$MC/CROSSROADS.stream_paused = true
+		
+	else:
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		#$MC/CROSSROADS.stream_paused = false
+
+func _on_resume_pressed() -> void:
+	toggle_pause()
+
+func _on_quit_pressed() -> void:
+	toggle_pause()
+	SaveGame.save_game()
+	get_tree().change_scene_to_file("res://Title/title.tscn")
