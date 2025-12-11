@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://b46tebiqjyh7h"]
+[gd_scene load_steps=14 format=3 uid="uid://b46tebiqjyh7h"]
 
 [ext_resource type="Texture2D" uid="uid://cf0365jxofa3y" path="res://Bg2/background_0.png" id="1_cjt3o"]
 [ext_resource type="Texture2D" uid="uid://c374fogbec7bk" path="res://Bg2/background_1.png" id="2_31ba4"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://dp4nqyc5jv0vq" path="res://Global/upgrades.tscn" id="7_ri12l"]
 [ext_resource type="PackedScene" uid="uid://3kltsx84mnf6" path="res://Characters/mc.tscn" id="8_gxvw6"]
 [ext_resource type="AudioStream" uid="uid://b1q27p33vjij4" path="res://Global/03. Crossroads.ogg" id="9_2f54w"]
+[ext_resource type="PackedScene" uid="uid://dkifncno0kis1" path="res://Global/HealthBar.tscn" id="10_ri12l"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_cxc26"]
 texture = ExtResource("4_cuokl")
@@ -707,3 +708,5 @@ limit_right = 4200
 limit_bottom = 700
 position_smoothing_speed = 50.0
 rotation_smoothing_speed = 50.0
+
+[node name="HealthBar" parent="." instance=ExtResource("10_ri12l")]

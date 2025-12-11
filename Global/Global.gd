@@ -66,9 +66,9 @@ func _process(_delta: float) -> void:
 		add_child(message)
 		message.show_message("Powered Up...." ,1 , true)
 	
-	if Global.frags == 5 and not upgrade1:
-		upgrade1 = true
-		get_tree().get_first_node_in_group("upgrades").create_upgrades(["Healing" , "Heal 20% Health with Energies" , "heal"] , ["Damage" , "Increase Damage" , "damage"] , ["Knockback" , "" , "knockback"])
+	#if Global.frags == 5 and not upgrade1:
+		#upgrade1 = true
+		#get_tree().get_first_node_in_group("upgrades").create_upgrades(["Healing" , "Heal 20% Health with Energies" , "heal"] , ["Damage" , "Increase Damage" , "damage"] , ["Knockback" , "" , "knockback"])
 	
 
 func give_powerup(x):
