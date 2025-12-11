@@ -30,7 +30,7 @@ func _on_quit_pressed() -> void:
 
 func _on_play_pressed() -> void:
 	await SaveGame.load_game()
-	get_tree().change_scene_to_file("res://Levels/boss_arena_1.tscn")
+	get_tree().change_scene_to_file("res://Levels/level_2.tscn")
 	#if Global.Level == 0:
 		#get_tree().change_scene_to_file("res://Global/intro.tscn")
 	#elif Global.Level == 1:

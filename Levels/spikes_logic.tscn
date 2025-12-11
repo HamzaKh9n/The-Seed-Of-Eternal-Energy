@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://1kldl2cyx26c"]
+[gd_scene load_steps=3 format=3 uid="uid://cd1xep446cfgu"]
 
-[ext_resource type="Script" path="res://spikes_logic.gd" id="1_7nri4"]
+[ext_resource type="Script" uid="uid://djexa6wrkigbk" path="res://spikes_logic.gd" id="1_7nri4"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_t4h2e"]
 size = Vector2(399, 20)
