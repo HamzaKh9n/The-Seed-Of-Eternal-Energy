@@ -7,6 +7,7 @@ var portal_interactions = 0
 @onready var fade_rect: ColorRect = $FadeIn/ColorRect
 var input_paused = false
 
+
 func _ready() -> void:
 	Global.stop = false
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
