@@ -78,7 +78,7 @@ func handle_player_death() -> void:
 		await $DialogBox.enqueue("You died too many times! The game will now reset.")
 		await get_tree().create_timer(2.0).timeout
 
-		SaveGame.reset_save()   # Completely reset game data
+		#SaveGame.reset_game()   # Completely reset game data
 		get_tree().change_scene_to_file("res://Title/title.tscn")
 		return
 

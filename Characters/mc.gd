@@ -19,6 +19,8 @@ extends CharacterBody2D
 @onready var attack_radius = $AttackRadius
 @onready var fixed_scale = scale.x
 
+
+var cutscene =  false
 # AfterImage
 
 var AfterImage = preload("res://Global/ghost.tscn")
@@ -58,6 +60,10 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if cutscene:
+		return
+		
+	
 	var applied_gravity := false
 
 	if Global.stop:
@@ -372,3 +378,18 @@ func spawn_afterimage():
 func _on_ghost_timer_timeout() -> void:
 	if is_dashing:
 		spawn_afterimage()
+
+
+func play_cutscene_1():
+	cutscene = true
+	anim.stop()
+	sprite.play("Walk")
+	velocity.x = 200
+	move_and_slide()
+	
+func stop_cutscene_1():
+	cutscene = false
+	anim.play("Idle")
+	sprite.stop()
+	velocity.x = 0
+	#move_and_slide()
