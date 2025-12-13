@@ -490,7 +490,7 @@ tile_map_data = PackedByteArray("AAAAAAoAAAAQABIAAAAAAAsAAAAQABIAAAAAAAwAAAAQABI
 tile_set = SubResource("TileSet_jcvcn")
 
 [node name="MC" parent="." instance=ExtResource("3_rp5ft")]
-position = Vector2(1871, 974.00006)
+position = Vector2(13483, 599)
 scale = Vector2(2.2548895, 2.2548895)
 ghost_scale = 2.5
 
@@ -502,8 +502,6 @@ limit_left = -300
 limit_top = -4500
 limit_right = 14250
 limit_bottom = 4800
-limit_smoothed = true
-position_smoothing_enabled = true
 position_smoothing_speed = 10.0
 
 [node name="ParallaxBackground3" type="ParallaxBackground" parent="."]
