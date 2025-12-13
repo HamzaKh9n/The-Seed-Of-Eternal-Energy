@@ -1811,15 +1811,6 @@ offset_bottom = 216.0
 scale = Vector2(2.1068878, 2.1068878)
 text = "Resume"
 
-[node name="Save" type="Button" parent="Pause menu"]
-offset_left = 496.0
-offset_top = 274.0
-offset_right = 566.0
-offset_bottom = 305.0
-scale = Vector2(2.1068878, 2.1068878)
-text = "Save
-"
-
 [node name="Quit" type="Button" parent="Pause menu"]
 offset_left = 496.0
 offset_top = 362.0
@@ -1829,6 +1820,7 @@ scale = Vector2(2.1068878, 2.1068878)
 text = "Quit"
 
 [node name="DialogBox" parent="." instance=ExtResource("6_c30j6")]
+layer = 7
 
 [node name="FadeIn" type="CanvasLayer" parent="."]
 layer = 10
@@ -1903,3 +1895,5 @@ disabled = true
 
 [connection signal="area_entered" from="RestSpot" to="." method="_on_rest_spot_area_entered"]
 [connection signal="area_entered" from="RestSpot2" to="." method="_on_rest_spot_2_area_entered"]
+[connection signal="pressed" from="Pause menu/Resume" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="Pause menu/Quit" to="." method="_on_quit_pressed"]

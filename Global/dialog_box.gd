@@ -17,7 +17,8 @@ var message = null
 # PUBLIC: Call this from anywhere
 # Example: await $DialogBox.enqueue("Hello there!")  OR
 #          await $DialogBox.enqueue("You died!", true)  (non-skippable)
-# ----------------------------------------------------
+# ---------------------------------------------------
+
 func enqueue(text, non_skippable := false) -> void:
 	# push a dictionary so we can pass the non_skippable flag
 	_queue.append({"text": text, "non_skippable": non_skippable})
@@ -27,11 +28,9 @@ func enqueue(text, non_skippable := false) -> void:
 # Stop all typing and clear the queue safely (call before reload)
 func stop_all() -> void:
 	_queue.clear()
-	_skip = true
-	_current_non_skippable = false
-	_typing = false
-	_running = false
+	_force_unlock()
 	visible = false
+
 
 # ----------------------------------------------------
 # PROCESS QUEUE (async)
@@ -55,7 +54,7 @@ func _process_queue() -> void:
 		Global.stop = Global.dialog_count > 0
 
 	_running = false
-
+	_force_unlock()
 # ----------------------------------------------------
 # SHOW + TYPE COROUTINE
 # ----------------------------------------------------
@@ -132,3 +131,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		_skip = true    # Skip OR close
 		message.hide_message()
 		
+func _force_unlock() -> void:
+	Global.dialog_count = 0
+	Global.stop = false
+	_skip = false
+	_typing = false
+	_current_non_skippable = false
+	_running = false

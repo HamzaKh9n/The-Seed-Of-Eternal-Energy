@@ -12,6 +12,8 @@ func _ready() -> void:
 	Global.stop = false
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	Global.Level = 1
+	Global.frags = 0
+	Global.max_frags = 10
 	SaveGame.save_game()
 	input_paused = true
 	Engine.time_scale = 1.2
@@ -56,7 +58,6 @@ func _process(_delta: float) -> void:
 	# CHECK PLAYER DEATH
 	if Global.health <= 0:
 		await handle_player_death()
-
 
 func fade_out_and_change_scene(path: String) -> void:
 	var tween = create_tween()

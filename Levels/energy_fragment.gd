@@ -4,6 +4,7 @@ extends Area2D
 @export var speed: float = 300
 @export var magnet_range: float = 150
 @onready var sprite: Sprite2D = $Sprite2D
+@export var special : String = ''
 
 var player_hitbox: Area2D = null
 var collected: bool = false
@@ -14,6 +15,12 @@ func _ready():
 	area_entered.connect(Callable(self, "_on_area_entered"))
 
 func _process(delta):
+	if special == 'dash':
+		modulate = Color(1.0, 0.0, 0.0, 1.0)
+	elif special == 'knockback':
+		modulate = Color(0.713, 0.321, 0.98, 1.0)
+	elif special == 'heal':
+		modulate = Color(0.0, 6.773, 0.0, 1.0)
 	# Glow pulse
 	pulse_time += delta * 3
 	var glow = 0.6 + 0.4 * sin(pulse_time)
@@ -27,9 +34,11 @@ func _process(delta):
 		if dist < magnet_range:
 			global_position += dir.normalized() * speed * delta
 		# Collect if very close
+
 		if dist < 20:
 			if player_hitbox.get_parent().has_method("add_energy"):
 				player_hitbox.get_parent().add_energy(energy_amount)
+				
 			queue_free()
 			collected = true
 			Global.frags += 1
@@ -38,6 +47,25 @@ func _process(delta):
 				if Global.health > 100:
 					Global.health = 100
 			print(Global.frags)
+		var dialog = get_tree().get_first_node_in_group("DialogBox")
+		if not special == '':
+			if special == 'dash':
+				Global.give_powerup('dash')
+				await dialog.enqueue("Congratulation!! You Found Dash Ability Orb. [Q] for Dash")
+				special = ''
+			elif special == 'heal':
+				Global.give_powerup('heal')
+				await dialog.enqueue("Congratulation!! You Found Heal Ability Orb. Collect Energy to Heal 20% of Your Health")
+				special = ''
+			elif special == 'stun':
+				Global.give_powerup('stun')
+				await dialog.enqueue("Congratulation!! You Found Stun Ability Orb. Hitting Enimies Stun them fo 0.5 second")
+				special = ''
+			elif special == 'knockback':
+				Global.give_powerup('knockback')	
+				await dialog.enqueue("Congratulation!! You Found Knockback Ability Orb. Hitting Enimies Knocks them Backwards")
+				special = ''
+
 
 func _on_area_entered(area: Area2D):
 	# Only trigger for player hitbox

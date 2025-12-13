@@ -8,9 +8,16 @@ var portal_interactions = 0
 var input_paused = false
 
 func _ready() -> void:
+	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	SaveGame.load_game()
+	input_paused = false
+	Global.unlock_input()
 	Global.stop = false
-
+	Global.upgrades = SaveGame.data.upgrades
+	Global.max_frags = 25
+	Global.frags = 10
+	Global.health = 100
+	Global.deaths = 0
 	Global.Level = 2
 	print("Level" , Global.Level)
 	SaveGame.save_game()
@@ -19,7 +26,7 @@ func _ready() -> void:
 	Engine.time_scale = 1.4
 	fade_rect.modulate.a = 1.0
 	fade_in()
-
+	await $DialogBox.enqueue("Welcome to Level 2!!")
 	if Global.just_reloaded:
 		input_paused = false
 		Global.stop = false
@@ -53,15 +60,17 @@ func fade_out_and_change_scene(path: String) -> void:
 #               LEVEL 2 DEATH HANDLER
 # ======================================================
 func handle_player_death() -> void:
+	print(Global.deaths)
 	Global.stop = true
 	Global.frags = max(Global.frags - 3, 0)
-	Global.EnergyCollected.clear()
-	Global.EnemyKilled.clear()
+	#Global.EnergyCollected.clear()
+	#Global.EnemyKilled.clear()
 
 	# INCREASE DEATH COUNT
 	Global.deaths += 1
-	SaveGame.data.Deaths = Global.deaths
-	await SaveGame.save_game()
+	Global.max_frags = 25
+	#SaveGame.data.Deaths = Global.deaths
+	#await SaveGame.save_game()
 
 	Global.health = 100
 	
@@ -129,3 +138,16 @@ func _on_resume_pressed() -> void:
 func _on_quit_pressed() -> void:
 	toggle_pause()
 	get_tree().change_scene_to_file("res://Title/title.tscn")
+
+
+func _on_tp_area_entered(area: Area2D) -> void:
+	if area.is_in_group('PlayerHitbox'):
+		if Global.frags >= 25:
+			await $DialogBox.enqueue("Congratulations !! You Found the Portal.")
+			fade_out_and_change_scene('res://Levels/boss_arena_1.tscn')
+		else:
+			if portal_interactions >= 1:
+				await $DialogBox.enqueue("Not Enough Energy Fragments")
+			else:
+				await $DialogBox.enqueue("Congratulations !! You Found the Portal || Collect Enough Energy frags to Pass Through It.")
+		portal_interactions += 1

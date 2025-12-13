@@ -53,6 +53,11 @@ var is_dashing = false
 var air_dash_used = false
 
 
+#attack
+var attack_timer := 0.0
+var attack_timeout := 0.35   # slightly longer than longest attack anim
+
+
 func _ready() -> void:
 	$Dust.global_position.x = global_position.x - 80
 	$Dust.visible = false
@@ -62,10 +67,9 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if cutscene:
 		return
-		
 	
 	var applied_gravity := false
-
+	#print("Is Hurt " , is_hurt)
 	if Global.stop:
 		anim.play("Idle")
 		velocity.x = 0
@@ -75,6 +79,17 @@ func _physics_process(delta: float) -> void:
 				applied_gravity = true
 		move_and_slide()
 		return
+
+	# ----------------------------------------------------
+	# ATTACK FAIL-SAFE (ANTI FREEZE)
+	# ----------------------------------------------------
+	if attack:
+		attack_timer -= delta
+
+		if attack_timer <= 0:
+			_force_exit_attack("timeout")
+
+
 
 	# PLAYER DEATH
 	if Global.health <= 0:
@@ -97,13 +112,14 @@ func _physics_process(delta: float) -> void:
 				tree.change_scene_to_file("res://Levels/level_2.tscn")
 			3:
 				await Global.safe_frame()
-				tree.change_scene_to_file("res://Emperor's Grave Scenes/graves.tscn")
+				tree.change_scene_to_file("res://Levels/boss_arena_1.tscn")
 		return
 
 	# HURT STATE
-	if is_hurt:
+	if is_hurt and is_on_floor()		:
 		hurt_timer -= delta
-		velocity.x = lerp(velocity.x, 0.0, 6.0 * delta)
+
+		velocity.x = lerp(velocity.x, 0.0, 10.0 * delta)
 
 		if not applied_gravity:
 			velocity.y += gravity * delta
@@ -111,9 +127,13 @@ func _physics_process(delta: float) -> void:
 
 		if hurt_timer <= 0:
 			is_hurt = false
+			print('Reseted IS HURT STATEEE')
+			velocity.x = 0   # 🔴 HARD STOP (CRITICAL)
+		anim.play("Idle")
 
 		move_and_slide()
 		return
+
 
 	# ----------------------------------------------------
 	# MOVEMENT INPUTS
@@ -208,34 +228,36 @@ func _physics_process(delta: float) -> void:
 	# ----------------------------------------------------
 	# AIR MOVEMENT + GRAVITY
 	# ----------------------------------------------------
+	# AIR MOVEMENT + GRAVITY (ALWAYS APPLY, EVEN DURING ATTACK)
+# AIR MOVEMENT + GRAVITY (ALWAYS APPLY GRAVITY)
 	if not is_on_floor():
 
 		var air_dir := Input.get_action_strength("D") - Input.get_action_strength("A")
 
-		if air_dir != 0:
-			velocity.x = lerp(velocity.x, air_dir * (move_speed * 0.6), 8 * delta)
-		else:
-			velocity.x = lerp(velocity.x, 0.0, 12 * delta)
+		# Allow air steering ONLY if not attacking
+		if not attack:
+			if air_dir != 0:
+				velocity.x = lerp(velocity.x, air_dir * (move_speed * 0.6), 8 * delta)
+			else:
+				velocity.x = lerp(velocity.x, 0.0, 12 * delta)
 
-		# gravity
+		# GRAVITY MUST ALWAYS APPLY (EVEN DURING ATTACK)
 		if velocity.y < 0:
-			var g = low_gravity if Input.is_action_pressed("Space") else high_gravity
-			if not applied_gravity:
-				velocity.y += g * delta
-				applied_gravity = true
+			var g := low_gravity if Input.is_action_pressed("Space") else high_gravity
+			velocity.y += g * delta
 		else:
-			if not applied_gravity:
-				velocity.y += gravity * delta
-				applied_gravity = true
+			velocity.y += gravity * delta
 
-		if velocity.y > 0:
+		if velocity.y > 0 and anim.current_animation != "Fall" and not attack:
 			anim.play("Fall")
+
+
 
 	# ----------------------------------------------------
 	# LAND
 	# ----------------------------------------------------
 	if not was_on_floor and is_on_floor() and velocity.y >= 0:
-		if anim.current_animation not in ["Hurt"]:
+		if anim.current_animation not in ["Hurt"] and not attack:
 			anim.play("Land")
 
 	was_on_floor = is_on_floor()
@@ -244,8 +266,10 @@ func _physics_process(delta: float) -> void:
 	# ATTACK INPUT
 	# ----------------------------------------------------
 	if Input.is_action_just_pressed("Attack") and not cooldown:
+		is_hurt = false
 		attack = true
 		cooldown = true
+		attack_timer = attack_timeout
 
 		$"Attack Cooldown".start()
 		$"Combo Cooldown".start()
@@ -269,6 +293,7 @@ func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 		anim.play("Idle")
 
 	if anim_name.begins_with("Attack"):
+		is_hurt =  false
 		attack = false
 		Do_attack()
 
@@ -350,6 +375,7 @@ func start_invincibility() -> void:
 	sprite.modulate = Color(1, 1, 1, 1)
 	can_hurt = true
 	velocity.x = 0
+	is_hurt = false
 
 
 func _on_dash_cooldown_timeout() -> void:
@@ -393,3 +419,16 @@ func stop_cutscene_1():
 	sprite.stop()
 	velocity.x = 0
 	#move_and_slide()
+
+func _force_exit_attack(reason := "") -> void:
+	# Optional debug
+	#print("FORCE EXIT ATTACK:", reason)
+
+	attack = false
+	cooldown = false
+	velocity.x = 0
+
+	if is_on_floor():
+		anim.play("Idle")
+	else:
+		anim.play("Fall")

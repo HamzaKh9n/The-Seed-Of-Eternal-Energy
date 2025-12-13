@@ -31,7 +31,7 @@ var knockback_duration := 0.2
 var knockback_timer := 0.0
 
 var stunned := false
-var can_stun := false
+var can_stun := true
 var stun_time := 0.0
 var stun_timer := 0.0
 
@@ -243,6 +243,13 @@ func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 #       DAMAGE & KNOCKBACK
 # -----------------------------
 func take_damage(amount):
+	#Global.stun = true
+	if Global.stun:
+		#anim.play('Damage')
+		anim.stop()
+		await get_tree().create_timer(0.5).timeout
+		anim.pause()
+		
 	if spawned:
 		health -= amount
 

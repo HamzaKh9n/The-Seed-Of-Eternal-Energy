@@ -9,6 +9,7 @@ extends CharacterBody2D
 @onready var player = get_tree().get_first_node_in_group("player")
 @onready var restTIme = $Rest
 
+var damage_flash_running := false
 
 @onready var attack_cooldown = $Attack_Cooldown
 
@@ -39,6 +40,7 @@ var in_attack = false
 var health = 500.0
 var max_health = 500.0
 var phase = 1
+var death_animation_running = false
 
 func _ready() -> void:
 	summonCooldown.start()
@@ -47,8 +49,15 @@ func _ready() -> void:
 
 
 func _physics_process(_delta: float) -> void:
+	if death_animation_running:
+		return
+		
 	if not Global.fight_started:
 		change_state("idle")
+		return
+	
+	if health <- 0:
+		anim.play('Death')
 		return
 	
 	if stun:
@@ -82,7 +91,7 @@ func _physics_process(_delta: float) -> void:
 		if canThink:
 			chose_attack()
 		#print(attack_type)
-		if in_melee and not work_in_progress:
+		if in_melee and not work_in_progress and attack_type == '':
 			attack_type = 'melee'
 		#if prev_type != attack_type:
 		##print(attack_type)
@@ -227,7 +236,7 @@ func check_phase():
 	elif health_percent<35 and health_percent > 0:
 		phase = 3
 		tpCooldown.wait_time = 5
-		summonCooldown.wait = 10
+		summonCooldown.wait_time = 10
 	if health_percent <= 0:
 		phase = 4
 	
@@ -384,14 +393,43 @@ func _on_tp_cooldown_timeout() -> void:
 
 func _on_rest_timeout() -> void:
 	restTIme.stop()
+
+func deal_melee_damage():
+	if not get_player_in_area(attack_radius):
+		return
+
+	player.take_damage(
+		10,
+		player.global_position.x - global_position.x,
+		4500
+	)
 	
 func take_damage(amount):
 	health -= amount
-	#print("health" , health)
+	restTIme.stop()
 
+	if damage_flash_running:
+		return
+
+	damage_flash_running = true
+
+	# Flash white / red
+	sprite.modulate = Color(1, 0.3, 0.3, 1)
+
+	var tween := create_tween()
+	tween.tween_property(sprite, "modulate", Color(1, 1, 1, 1), 0.12)
+	tween.finished.connect(func():
+		damage_flash_running = false
+	)
+	
+#
+#func _on_animation_player_animation_finished(anim_name: StringName) -> void:
+	#if anim_name.begins_with('Attack'):
+		#if in_attack:
+			#player.take_damage(10 , player.global_position.x - global_position.x, 4500)
 
 
 func _on_animation_player_animation_finished(anim_name: StringName) -> void:
-	if anim_name.begins_with('Attack'):
-		if in_attack:
-			player.take_damage(10 , player.global_position.x - global_position.x, 4500)
+	if anim_name == 'Death':
+		Global.fight_started = false
+		queue_free()

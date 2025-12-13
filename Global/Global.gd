@@ -24,7 +24,7 @@ var upgrades = []
 var upgrade = null
 var knockback = false
 var stun = false
-var dash = true
+var dash = false
 var ragemode = false
 var lifesteal = false
 var damage = false
@@ -80,9 +80,10 @@ func _reset_stuck_inputs():
 	Input.action_release("Attack")
 	Input.action_release("Dash")
 
-
-
 func _ready() -> void:
+	check_power()
+	
+func check_power() -> void:
 	for x in Global.upgrades:
 		match x:
 			"knockback":
@@ -104,8 +105,9 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
+	check_power()
 	if upgrade != null:
-		upgrades.append(upgrade)
+		#upgrades.append(upgrade)
 		give_powerup(upgrade)
 		upgrade = null
 		message = messagebox.instantiate()
@@ -135,6 +137,10 @@ func give_powerup(x):
 		"heal":
 			heal = true
 	print("Upgraded" , x )
+	if not x in upgrades:
+		upgrades.append(x)
+	else:
+		print('Upgrade Already Exists')
 	stop = false
 	#message.hide_message()
 

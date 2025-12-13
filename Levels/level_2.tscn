@@ -490,7 +490,7 @@ tile_map_data = PackedByteArray("AAAAAAoAAAAQABIAAAAAAAsAAAAQABIAAAAAAAwAAAAQABI
 tile_set = SubResource("TileSet_jcvcn")
 
 [node name="MC" parent="." instance=ExtResource("3_rp5ft")]
-position = Vector2(13483, 599)
+position = Vector2(340, -2789.0002)
 scale = Vector2(2.2548895, 2.2548895)
 ghost_scale = 2.5
 
@@ -599,6 +599,7 @@ shape = SubResource("CircleShape2D_rf6l5")
 [node name="EnergyFragment" parent="." instance=ExtResource("8_5yfph")]
 position = Vector2(474, -1501)
 scale = Vector2(1.7075473, 1.7075473)
+special = "heal"
 
 [node name="EnergyFragment2" parent="." instance=ExtResource("8_5yfph")]
 position = Vector2(4688, -2479)
@@ -623,6 +624,7 @@ scale = Vector2(1.7075473, 1.7075473)
 [node name="EnergyFragment7" parent="." instance=ExtResource("8_5yfph")]
 position = Vector2(5813, 4428)
 scale = Vector2(1.7075473, 1.7075473)
+special = "dash"
 
 [node name="EnergyFragment8" parent="." instance=ExtResource("8_5yfph")]
 position = Vector2(7673.9995, 2068.9998)
@@ -741,15 +743,6 @@ offset_bottom = 216.0
 scale = Vector2(2.1068878, 2.1068878)
 text = "Resume"
 
-[node name="Save" type="Button" parent="Pause menu"]
-offset_left = 496.0
-offset_top = 274.0
-offset_right = 566.0
-offset_bottom = 305.0
-scale = Vector2(2.1068878, 2.1068878)
-text = "Save
-"
-
 [node name="Quit" type="Button" parent="Pause menu"]
 offset_left = 496.0
 offset_top = 362.0
@@ -807,5 +800,6 @@ X = 1000.0
 Y = 3150.0
 
 [connection signal="area_entered" from="S1" to="." method="_on_s_1_area_entered"]
+[connection signal="area_entered" from="TP" to="." method="_on_tp_area_entered"]
 [connection signal="pressed" from="Pause menu/Resume" to="." method="_on_resume_pressed"]
 [connection signal="pressed" from="Pause menu/Quit" to="." method="_on_quit_pressed"]

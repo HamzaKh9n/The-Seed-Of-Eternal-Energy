@@ -10,5 +10,6 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
 	$TextureProgressBar.value = Global.health
+	$TextureProgressBar2.max_value = Global.max_frags
 	$TextureProgressBar2.value = Global.frags
 	
