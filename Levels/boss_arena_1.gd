@@ -6,6 +6,13 @@ extends Node2D
 
 var cutscene_running := false
 
+func _ready() -> void:
+	$MC/CROSSROADS.play()
+
+func startmusic():
+	$MC/CROSSROADS.stop()
+	if not $MC/BossFight.playing:
+		$MC/BossFight.play()	
 
 func _process(delta: float) -> void:
 
@@ -36,7 +43,7 @@ func _process(delta: float) -> void:
 		Global.unlock_input()
 		Global.fight_started = true
 		Global.stop = false
-
+		startmusic()
 		cutscene_running = false   # Cutscene completely finished
 		$StaticBody2D/CollisionShape2D.disabled = false
 		$StaticBody2D/CollisionShape2D2.disabled = false
@@ -64,3 +71,20 @@ func tween_camera_x(target_x: float, duration := 1.0):
 	)
 
 	await tween.finished   # waits correctly
+	
+
+	
+
+
+
+
+func _on_rest_spot_area_entered(area: Area2D) -> void:
+	if area.is_in_group("EnemyHitbox"):
+		$ReaperBoss.attack_type = ''
+		#$ReaperBoss.flip_reaper(-1)
+
+
+func _on_rest_spot_2_area_entered(area: Area2D) -> void:
+	if area.is_in_group("EnemyHitbox"):
+		$ReaperBoss.attack_type = ''
+		#$ReaperBoss.flip_reaper(1)

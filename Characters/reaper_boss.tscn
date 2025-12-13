@@ -669,25 +669,11 @@ position = Vector2(16, 5)
 scale = Vector2(-1.8565867, 0.67692184)
 shape = SubResource("CapsuleShape2D_ci4sy")
 
-[node name="Panel" type="Panel" parent="AttackRadius/CollisionShape2D"]
-offset_left = -2.6931143
-offset_top = -42.840984
-offset_right = 37.306885
-offset_bottom = -2.8409843
-scale = Vector2(-0.17322838, 2.1592238)
-
 [node name="SummonPoint" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SummonPoint"]
 position = Vector2(50, -45)
 shape = SubResource("CircleShape2D_ci4sy")
-
-[node name="Panel" type="Panel" parent="SummonPoint/CollisionShape2D"]
-offset_left = -7.0
-offset_top = -7.0
-offset_right = 33.0
-offset_bottom = 33.0
-scale = Vector2(0.36901027, 0.36901027)
 
 [node name="Attack_Cooldown" type="Timer" parent="."]
 
@@ -696,7 +682,7 @@ wait_time = 0.5
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_3trne")
-animation = &"Summon"
+animation = &"Attack 1"
 autoplay = "Idle"
 frame = 1
 
@@ -715,6 +701,7 @@ wait_time = 20.0
 wait_time = 2.0
 
 [connection signal="timeout" from="Attack_Cooldown" to="." method="_on_attack_cooldown_timeout"]
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
 [connection signal="timeout" from="TpCooldown" to="." method="_on_tp_cooldown_timeout"]
 [connection signal="timeout" from="SummonCooldown" to="." method="_on_summon_cooldown_timeout"]
 [connection signal="timeout" from="Rest" to="." method="_on_rest_timeout"]

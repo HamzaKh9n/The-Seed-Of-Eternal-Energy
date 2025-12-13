@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=4 uid="uid://b46tebiqjyh7h"]
+[gd_scene load_steps=30 format=4 uid="uid://b46tebiqjyh7h"]
 
 [ext_resource type="Texture2D" uid="uid://cf0365jxofa3y" path="res://Bg2/background_0.png" id="1_cjt3o"]
 [ext_resource type="Script" uid="uid://bxneb7mydwt0o" path="res://Levels/boss_arena_1.gd" id="1_vl1bn"]
@@ -13,6 +13,7 @@
 [ext_resource type="AudioStream" uid="uid://b1q27p33vjij4" path="res://Global/03. Crossroads.ogg" id="9_2f54w"]
 [ext_resource type="PackedScene" uid="uid://dkifncno0kis1" path="res://Global/HealthBar.tscn" id="10_ri12l"]
 [ext_resource type="PackedScene" uid="uid://1kldl2cyx26c" path="res://Levels/spikes_logic.tscn" id="12_2f54w"]
+[ext_resource type="AudioStream" uid="uid://dpkrm1u35r0tp" path="res://Sounds/Grimm-_Hollow-Knight_-The-Grimm-Troupe_.ogg" id="12_kl33d"]
 [ext_resource type="PackedScene" uid="uid://t0o6s7wpdvma" path="res://Characters/reaper_boss.tscn" id="13_47a20"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vl1bn"]
@@ -1843,7 +1844,7 @@ color = Color(0, 0, 0, 1)
 layer = 12
 
 [node name="MC" parent="." instance=ExtResource("8_gxvw6")]
-position = Vector2(3013, 542.00006)
+position = Vector2(403.00024, 542.00006)
 scale = Vector2(1.5660875, 1.5660875)
 move_speed = 503.0
 jump_force = -798.0
@@ -1855,7 +1856,12 @@ process_mode = 3
 position = Vector2(-0.6955414, 16.69313)
 scale = Vector2(0.44348073, 0.44348073)
 stream = ExtResource("9_2f54w")
-autoplay = true
+
+[node name="BossFight" type="AudioStreamPlayer2D" parent="MC"]
+process_mode = 3
+position = Vector2(-0.6955414, 16.69313)
+scale = Vector2(0.44348073, 0.44348073)
+stream = ExtResource("12_kl33d")
 
 [node name="Camera2D" type="Camera2D" parent="MC"]
 process_mode = 3
@@ -1877,7 +1883,7 @@ scale = Vector2(1.6731551, 1.3514699)
 X = 400.0
 Y = 500.0
 
-[node name="ReaperBoss" parent="." instance=ExtResource("13_47a20")]
+[node name="ReaperBoss" parent="." groups=["EnemyHitbox"] instance=ExtResource("13_47a20")]
 position = Vector2(3328.9998, 318)
 scale = Vector2(4.236542, 4.236542)
 
@@ -1894,3 +1900,6 @@ disabled = true
 position = Vector2(3767, 358)
 shape = SubResource("RectangleShape2D_vl1bn")
 disabled = true
+
+[connection signal="area_entered" from="RestSpot" to="." method="_on_rest_spot_area_entered"]
+[connection signal="area_entered" from="RestSpot2" to="." method="_on_rest_spot_2_area_entered"]
