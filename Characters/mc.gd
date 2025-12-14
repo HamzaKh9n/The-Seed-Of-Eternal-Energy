@@ -65,8 +65,6 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	if cutscene:
-		return
 	
 	var applied_gravity := false
 	#print("Is Hurt " , is_hurt)
@@ -80,6 +78,9 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		return
 
+	if cutscene:
+		return
+		
 	# ----------------------------------------------------
 	# ATTACK FAIL-SAFE (ANTI FREEZE)
 	# ----------------------------------------------------
@@ -423,6 +424,10 @@ func play_cutscene_2():
 	#anim.stop()
 	sprite.play("Walk")
 	velocity.x = 150
+	if get_tree().paused:
+		velocity = Vector2.ZERO
+		move_and_slide()
+		return
 	move_and_slide()
 
 func stop_cutscene_2():
@@ -431,6 +436,7 @@ func stop_cutscene_2():
 	anim.play('Idle')
 	sprite.stop()
 	velocity.x = 0
+	
 	#move_and_slide()
 
 	

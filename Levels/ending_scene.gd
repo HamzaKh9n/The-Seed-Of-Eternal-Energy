@@ -37,14 +37,20 @@ func _input(event):
 func toggle_pause():
 	paused = !paused
 	get_tree().paused = paused
-
 	$"Pause menu".visible = paused
+	if paused:
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		$MC/AudioStreamPlayer2D.stream_paused = true
+		
+	else:
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+		$MC/AudioStreamPlayer2D.stream_paused = false
 
 
 
 	
 func _on_resume_pressed() -> void:
-	print("resume")
+	print("resume")	
 	toggle_pause()
 
 

@@ -37,7 +37,7 @@ func _ready() -> void:
 		Global.stop = false
 		Global.just_reloaded = false
 	Global.dash = true
-	$ReaperBoss.health = 25
+	#$ReaperBoss.health = 25
 
 func startmusic():
 	$MC/CROSSROADS.stop()
