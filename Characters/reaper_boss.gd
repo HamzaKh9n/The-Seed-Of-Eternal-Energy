@@ -409,7 +409,9 @@ func deal_melee_damage():
 func take_damage(amount):
 	health -= amount
 	restTIme.stop()
-
+	if Global.lifesteal:
+		Global.health +=  10
+	
 	if damage_flash_running:
 		return
 
@@ -434,7 +436,7 @@ func take_damage(amount):
 func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 	if anim_name == 'Death':
 		Global.fight_started = false
-		queue_free()
+		#queue_free()
 		
 		
 func play_custcene():

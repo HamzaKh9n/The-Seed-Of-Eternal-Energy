@@ -252,7 +252,8 @@ func take_damage(amount):
 		
 	if spawned:
 		health -= amount
-
+		if Global.lifesteal:
+			Global.health += 10
 		# Do NOT interrupt attack animation
 		if anim.current_animation != "Attack":
 			anim.play("Damage")

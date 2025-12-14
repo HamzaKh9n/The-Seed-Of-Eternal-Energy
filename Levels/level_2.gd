@@ -88,6 +88,7 @@ func handle_player_death() -> void:
 
 		#SaveGame.reset_game()   # Completely reset game data
 		get_tree().change_scene_to_file("res://Title/title.tscn")
+		SaveGame.reset_game()
 		return
 
 	# --- NORMAL LEVEL RELOAD (DEATHS < 5) ---
@@ -142,8 +143,11 @@ func _on_quit_pressed() -> void:
 func _on_tp_area_entered(area: Area2D) -> void:
 	if area.is_in_group('PlayerHitbox'):
 		if Global.frags >= 25:
-			await $DialogBox.enqueue("Congratulations !! You Found the Portal.")
-			fade_out_and_change_scene('res://Levels/boss_arena_1.tscn')
+			if Global.heal_collected and Global.dash_collected:
+				await $DialogBox.enqueue("Congratulations !! You Found the Portal.")
+				fade_out_and_change_scene('res://Levels/boss_arena_1.tscn')
+			else:
+				await $DialogBox.enqueue("There is Something Special You are Leaving behind!! Can't Go Yet")
 		else:
 			if portal_interactions >= 1:
 				await $DialogBox.enqueue("Not Enough Energy Fragments")

@@ -22,7 +22,6 @@ SaveGame="*res://Global/save_game.gd"
 
 [display]
 
-window/size/borderless=true
 window/stretch/mode="canvas_items"
 
 [global_group]

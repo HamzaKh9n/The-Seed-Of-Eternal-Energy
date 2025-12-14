@@ -7,6 +7,6 @@ var base_color: Color
 func _ready():
 	base_color = color
 
-func _process(delta):
+func _process(_delta):
 	var pulse = sin(Time.get_ticks_msec() / 1000.0 * pulse_speed) * pulse_strength
 	color = Color(base_color.r, base_color.g, base_color.b, base_color.a + pulse)

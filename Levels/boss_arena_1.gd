@@ -34,13 +34,26 @@ func _ready() -> void:
 		input_paused = false
 		Global.stop = false
 		Global.just_reloaded = false
+	Global.dash = true
+	$ReaperBoss.health = 25
 
 func startmusic():
 	$MC/CROSSROADS.stop()
 	if not $MC/BossFight.playing:
 		$MC/BossFight.play()	
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
+	
+	if $ReaperBoss == null:
+		return
+	if $ReaperBoss.health <= 0:
+		$ReaperBoss.change_state('death')
+		await $ReaperBoss.anim.animation_finished
+		await $DialogBox.enqueue("The Path To The Hope World is now Opened!!!!!")
+		$ReaperBoss.global_position.x = -100
+		#$DialogBox.stop_all()
+		fade_out_and_change_scene("res://Emperor's Grave Scenes/graves.tscn")
+		return
 
 	# Prevent re-triggering while cutscene is running
 	if cutscene_running:

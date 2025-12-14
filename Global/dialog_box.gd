@@ -71,7 +71,7 @@ func _show_and_type(text: String, non_skippable := false) -> void:
 	label.clear()
 	label.bbcode_enabled = true
 	label.bbcode_text = text
-	label.visible_characters = 0.0
+	label.visible_characters = 0
 
 	var total := label.get_total_character_count()
 	var current := 0

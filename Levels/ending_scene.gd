@@ -10,12 +10,13 @@ var cutscene2 = false
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	Global.lock_input()
+	Global.saved_actions = {}
 	fade_in()
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	Engine.time_scale = 2
+	#Engine.time_scale = 2
 	if not cutscene1:
 		cutscene1 = true
 		print('playing cutscene')

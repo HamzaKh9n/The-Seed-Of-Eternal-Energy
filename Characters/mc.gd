@@ -303,8 +303,6 @@ func Do_attack():
 		if area.is_in_group("EnemyHitbox"):
 			var enemy = area.get_parent()
 			enemy.take_damage(Global.Power)
-			if Global.lifesteal:
-				Global.health += Global.power * 0.25
 			var dir_to_enemy: float = sign(enemy.global_position.x - global_position.x)
 			var knock_force: float = 150.0
 			velocity.x = -dir_to_enemy * knock_force
@@ -438,7 +436,7 @@ func stop_cutscene_2():
 	
 	
 
-func _force_exit_attack(reason := "") -> void:
+func _force_exit_attack(_reason := "") -> void:
 	# Optional debug
 	#print("FORCE EXIT ATTACK:", reason)
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=4 uid="uid://b46tebiqjyh7h"]
+[gd_scene load_steps=31 format=4 uid="uid://b46tebiqjyh7h"]
 
 [ext_resource type="Texture2D" uid="uid://cf0365jxofa3y" path="res://Bg2/background_0.png" id="1_cjt3o"]
 [ext_resource type="Script" uid="uid://bxneb7mydwt0o" path="res://Levels/boss_arena_1.gd" id="1_vl1bn"]
@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://1kldl2cyx26c" path="res://Levels/spikes_logic.tscn" id="12_2f54w"]
 [ext_resource type="AudioStream" uid="uid://dpkrm1u35r0tp" path="res://Sounds/Grimm-_Hollow-Knight_-The-Grimm-Troupe_.ogg" id="12_kl33d"]
 [ext_resource type="PackedScene" uid="uid://t0o6s7wpdvma" path="res://Characters/reaper_boss.tscn" id="13_47a20"]
+[ext_resource type="PackedScene" uid="uid://cq74cj83psrv8" path="res://Levels/energy_fragment.tscn" id="16_4565q"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vl1bn"]
 radius = 106.7942
@@ -1836,7 +1837,7 @@ color = Color(0, 0, 0, 1)
 layer = 12
 
 [node name="MC" parent="." instance=ExtResource("8_gxvw6")]
-position = Vector2(403.00024, 542.00006)
+position = Vector2(182.00002, 542.00006)
 scale = Vector2(1.5660875, 1.5660875)
 move_speed = 503.0
 jump_force = -798.0
@@ -1892,6 +1893,11 @@ disabled = true
 position = Vector2(3767, 358)
 shape = SubResource("RectangleShape2D_vl1bn")
 disabled = true
+
+[node name="EnergyFragment10" parent="." instance=ExtResource("16_4565q")]
+position = Vector2(515, 617)
+scale = Vector2(1.7075473, 1.7075473)
+special = "lifesteal"
 
 [connection signal="area_entered" from="RestSpot" to="." method="_on_rest_spot_area_entered"]
 [connection signal="area_entered" from="RestSpot2" to="." method="_on_rest_spot_2_area_entered"]

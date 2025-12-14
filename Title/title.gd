@@ -3,6 +3,7 @@ extends Node2D
 @onready var music := $TitleMusic
 
 func _ready():
+	Global.reset()
 	#SaveGame.reset_game()
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	print(music)
@@ -39,3 +40,5 @@ func _on_play_pressed() -> void:
 		get_tree().change_scene_to_file("res://Levels/level_2.tscn")
 	elif Global.Level == 3:
 		get_tree().change_scene_to_file("res://Levels/boss_arena_1.tscn")
+	elif Global.Level == 4:
+		get_tree().change_scene_to_file("res://Emperor's Grave Scenes/graves.tscn")

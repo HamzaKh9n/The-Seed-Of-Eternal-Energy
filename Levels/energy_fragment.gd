@@ -23,6 +23,8 @@ func _process(delta):
 		modulate = Color(0.713, 0.321, 0.98, 1.0)
 	elif special == 'heal':
 		modulate = Color(0.0, 6.773, 0.0, 1.0)
+	elif special == 'lifesteal':
+		modulate = Color(0.423, 0.218, 0.656, 1.0)
 	# Glow pulse
 	pulse_time += delta * 3
 	var glow = 0.6 + 0.4 * sin(pulse_time)
@@ -68,6 +70,10 @@ func _process(delta):
 			elif special == 'knockback':
 				Global.give_powerup('knockback')	
 				await dialog.enqueue("Congratulation!! You Found Knockback Ability Orb. Hitting Enimies Knocks them Backwards")
+				special = ''
+			elif special == 'lifesteal':
+				Global.give_powerup('lifesteal')	
+				await dialog.enqueue("Congratulation!! You Found Lifesteal Ability Orb. Hitting Enimies Recovers 10HP!!")
 				special = ''
 
 

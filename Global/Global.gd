@@ -24,11 +24,14 @@ var upgrades = []
 var upgrade = null
 var knockback = false
 var stun = false
-var dash = true
+var dash = false
 var ragemode = false
 var lifesteal = false
 var damage = false
 var heal = false
+var dash_collected = false
+var heal_collected = false
+var knockback_collected = false
 
 var upgrade1 = false
 
@@ -41,6 +44,49 @@ var fight_started = false
 
 
 var saved_actions := {}    # stores original action states
+
+
+func reset():
+	input_locked = false
+
+	max_health = 100
+	health = 100
+	frags = 0
+	Power = 25
+	Level = 0
+	max_frags = 10
+	stop = false
+	encounters = 0
+	dialog_count = 0
+	deaths = 0
+	EnemyKilled = []
+	EnergyCollected = []
+	checkpoint = ""
+	Intro = false
+	Level1IntroShown = false
+	just_reloaded = false
+
+	# Upgrades and Powerups
+	upgrades = []
+	upgrade = null
+	knockback = false
+	stun = false
+	dash = false
+	ragemode = false
+	lifesteal = false
+	damage = false
+	heal = false
+	dash_collected = false
+	heal_collected = false
+	knockback_collected = false
+
+	upgrade1 = false
+
+	message = null
+
+	#Boss Fghts
+	fight_started = false
+	saved_actions = {}    # stores original action states
 
 
 func lock_input() -> void:
