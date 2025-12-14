@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://tb6iamfboy00"
+path="res://.godot/imported/White Palace MP3 - Hollow Knight (2017) OST - Download Hollow Knight (2017) Soundtracks for FREE!.mp3-79b3c8682e86f67712822afc14b59214.mp3str"
+
+[deps]
+
+source_file="res://Sounds/White Palace MP3 - Hollow Knight (2017) OST - Download Hollow Knight (2017) Soundtracks for FREE!.mp3"
+dest_files=["res://.godot/imported/White Palace MP3 - Hollow Knight (2017) OST - Download Hollow Knight (2017) Soundtracks for FREE!.mp3-79b3c8682e86f67712822afc14b59214.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

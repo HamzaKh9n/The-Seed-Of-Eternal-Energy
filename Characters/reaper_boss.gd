@@ -27,7 +27,7 @@ var can_tp = false
 @onready var tpCooldown = $TpCooldown
 var attack_type = ""
 var work_in_progress = false
-
+@export var cutscene = false
 var state = "idle"
 var stun = false
 var returning = false
@@ -49,6 +49,8 @@ func _ready() -> void:
 
 
 func _physics_process(_delta: float) -> void:
+	if cutscene:
+		return
 	if death_animation_running:
 		return
 		
@@ -433,3 +435,30 @@ func _on_animation_player_animation_finished(anim_name: StringName) -> void:
 	if anim_name == 'Death':
 		Global.fight_started = false
 		queue_free()
+		
+		
+func play_custcene():
+	sprite.modulate.a = 0
+	cutscene = true
+	var restpoint = get_parent().get_child(0).get_child(0).global_position
+	global_position = restpoint
+	var t = 0
+	var duration = 1
+	while t < duration:
+		t += get_process_delta_time()
+		sprite.modulate.a += t
+	change_state('skill')
+	await anim.animation_finished
+	global_position.y = player.global_position.y
+	global_position.x = player.global_position.x - 100 
+	print('attack tppp')
+	anim.stop()
+	anim.play("Attack 2")
+	await anim.animation_finished
+	print('Doneee')
+	anim.stop()
+	anim.play('Idle')
+	return true
+
+func stop_cutscene():
+	cutscene = false

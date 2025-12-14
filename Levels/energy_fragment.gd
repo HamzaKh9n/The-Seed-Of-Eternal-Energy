@@ -15,6 +15,8 @@ func _ready():
 	area_entered.connect(Callable(self, "_on_area_entered"))
 
 func _process(delta):
+	if special == 'eternal':
+		modulate = Color(2.115, 1.806, 0.0, 0.804)
 	if special == 'dash':
 		modulate = Color(1.0, 0.0, 0.0, 1.0)
 	elif special == 'knockback':
@@ -25,8 +27,10 @@ func _process(delta):
 	pulse_time += delta * 3
 	var glow = 0.6 + 0.4 * sin(pulse_time)
 	sprite.modulate.a = glow
-	sprite.scale = Vector2.ONE * (0.1 + 0.2 * sin(pulse_time))
-
+	if special == 'eternal':
+		sprite.scale = Vector2.ONE * (0.1 + 0.2 * sin(pulse_time))
+	else:
+		sprite.scale = Vector2.ONE * (0.1 + 0.2 * sin(pulse_time))
 	# Magnet effect toward player if detected
 	if player_hitbox and not collected:
 		var dir = (player_hitbox.get_parent().global_position - global_position)
@@ -34,7 +38,7 @@ func _process(delta):
 		if dist < magnet_range:
 			global_position += dir.normalized() * speed * delta
 		# Collect if very close
-
+		
 		if dist < 20:
 			if player_hitbox.get_parent().has_method("add_energy"):
 				player_hitbox.get_parent().add_energy(energy_amount)

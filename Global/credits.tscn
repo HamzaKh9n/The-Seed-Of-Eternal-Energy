@@ -1,0 +1,47 @@
+[gd_scene load_steps=7 format=3 uid="uid://cohhlfslpmorn"]
+
+[ext_resource type="Script" uid="uid://mg532vtdmya0" path="res://Global/credits.gd" id="1_5erpm"]
+[ext_resource type="Texture2D" uid="uid://bpohcbp1ydhfj" path="res://Global/Ideathon.png" id="1_rqnno"]
+[ext_resource type="Texture2D" uid="uid://d1e7wkbpgw2kd" path="res://Global/Credits/Slide2.PNG" id="2_j26fu"]
+[ext_resource type="Texture2D" uid="uid://byruudehgckp5" path="res://Global/Credits/Slide3.PNG" id="3_5erpm"]
+[ext_resource type="Texture2D" uid="uid://laeshak6ggie" path="res://Global/Credits/Slide4.PNG" id="4_6p32y"]
+[ext_resource type="Texture2D" uid="uid://lqvvslyha1tq" path="res://Global/Credits/Slide5.PNG" id="5_73lco"]
+
+[node name="Credits" type="Node2D"]
+script = ExtResource("1_5erpm")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="CanvasLayer"]
+scale = Vector2(0.899021, 0.899021)
+texture = ExtResource("1_rqnno")
+centered = false
+
+[node name="Sprite2D2" type="Sprite2D" parent="CanvasLayer"]
+scale = Vector2(0.899021, 0.899021)
+texture = ExtResource("2_j26fu")
+centered = false
+
+[node name="Sprite2D3" type="Sprite2D" parent="CanvasLayer"]
+scale = Vector2(0.899021, 0.899021)
+texture = ExtResource("3_5erpm")
+centered = false
+
+[node name="Sprite2D4" type="Sprite2D" parent="CanvasLayer"]
+scale = Vector2(0.899021, 0.899021)
+texture = ExtResource("4_6p32y")
+centered = false
+
+[node name="Sprite2D5" type="Sprite2D" parent="CanvasLayer"]
+scale = Vector2(0.899021, 0.899021)
+texture = ExtResource("5_73lco")
+centered = false
+
+[node name="FadeIn" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="ColorRect" type="ColorRect" parent="FadeIn"]
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(29.181911, 16.565222)
+color = Color(0, 0, 0, 1)

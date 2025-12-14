@@ -1897,3 +1897,4 @@ disabled = true
 [connection signal="area_entered" from="RestSpot2" to="." method="_on_rest_spot_2_area_entered"]
 [connection signal="pressed" from="Pause menu/Resume" to="." method="_on_resume_pressed"]
 [connection signal="pressed" from="Pause menu/Quit" to="." method="_on_quit_pressed"]
+[connection signal="finished" from="MC/BossFight" to="." method="_on_boss_fight_finished"]

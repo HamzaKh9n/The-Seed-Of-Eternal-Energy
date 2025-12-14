@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://icm5c4sifrhw"]
+
+[ext_resource type="Script" uid="uid://dpifwyossklsp" path="res://Global/game_title.gd" id="1_ax5vo"]
+[ext_resource type="Texture2D" uid="uid://bpohcbp1ydhfj" path="res://Global/Ideathon.png" id="1_bnr3a"]
+
+[node name="GameTitle" type="Node2D"]
+script = ExtResource("1_ax5vo")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.899021, 0.899021)
+texture = ExtResource("1_bnr3a")
+centered = false
+
+[node name="FadeIn" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="ColorRect" type="ColorRect" parent="FadeIn"]
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(29.181911, 16.565222)
+color = Color(0, 0, 0, 1)

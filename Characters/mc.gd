@@ -94,7 +94,7 @@ func _physics_process(delta: float) -> void:
 	# PLAYER DEATH
 	if Global.health <= 0:
 		Global.deaths += 1
-		SaveGame.save_game()
+		#SaveGame.save_game()
 		anim.play("Death")
 		var tree = get_tree()
 		await anim.animation_finished
@@ -419,6 +419,24 @@ func stop_cutscene_1():
 	sprite.stop()
 	velocity.x = 0
 	#move_and_slide()
+
+func play_cutscene_2():
+	cutscene = true
+	#anim.stop()
+	sprite.play("Walk")
+	velocity.x = 150
+	move_and_slide()
+
+func stop_cutscene_2():
+	#cutscene = false
+	#anim.play("Idle")
+	anim.play('Idle')
+	sprite.stop()
+	velocity.x = 0
+	#move_and_slide()
+
+	
+	
 
 func _force_exit_attack(reason := "") -> void:
 	# Optional debug

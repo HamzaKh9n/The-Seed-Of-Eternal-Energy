@@ -44,16 +44,15 @@ func _process(_delta: float) -> void:
 	if Global.health <= 0:
 		await handle_player_death()
 
-
 func fade_out_and_change_scene(path: String) -> void:
 	var tween = create_tween()
-	tween.tween_property($ColorRect, "modulate:a", 1.0, 3.0)
+	tween.tween_property(fade_rect , "modulate:a", 1.0, 3.0)
 	tween.set_trans(Tween.TRANS_SINE)
 	tween.set_ease(Tween.EASE_IN_OUT)
-	tween.tween_callback(func():
-		SaveGame.save_game()
-		get_tree().change_scene_to_file(path)
-	)
+	await tween.finished
+	SaveGame.save_game()
+	get_tree().change_scene_to_file(path)
+
 
 
 # ======================================================

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c2frrxijlq72e" path="res://Global/ending.gd" id="1_koqif"]
 [ext_resource type="FontFile" uid="uid://ws62klh1aula" path="res://Global/RasterForgeRegular-JpBgm.ttf" id="2_cjfxa"]
-[ext_resource type="AudioStream" uid="uid://dgxhl82el2081" path="res://Global/15. Resting Grounds.mp3" id="3_mpff0"]
+[ext_resource type="AudioStream" uid="uid://tb6iamfboy00" path="res://Sounds/White Palace MP3 - Hollow Knight (2017) OST - Download Hollow Knight (2017) Soundtracks for FREE!.mp3" id="3_koqif"]
 
 [node name="Ending" type="Node2D"]
 script = ExtResource("1_koqif")
@@ -38,7 +38,7 @@ custom_minimum_size = Vector2(1200, 20)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("2_cjfxa")
 bbcode_enabled = true
-text = "Our world once thrived… until we drowned it in smoke.
+text = "The energy you sought was never hidden.
 "
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -48,7 +48,8 @@ custom_minimum_size = Vector2(500, 20)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("2_cjfxa")
 bbcode_enabled = true
-text = "For centuries, humanity fed on coal, petrol, and diesel—poisoning the sky with every breath."
+text = "It rose with every sunrise.
+"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -57,7 +58,8 @@ custom_minimum_size = Vector2(500, 20)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("2_cjfxa")
 bbcode_enabled = true
-text = "Oceans darkened. Forests collapsed. The air itself turned against us."
+text = "It moved with every breath of wind.
+"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -66,7 +68,7 @@ custom_minimum_size = Vector2(500, 20)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("2_cjfxa")
 bbcode_enabled = true
-text = "In desperation, the world searched for a new source of hope… a pure, eternal energy."
+text = "It waited, patient, in the world you crossed."
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -89,8 +91,7 @@ custom_minimum_size = Vector2(500, 20)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("2_cjfxa")
 bbcode_enabled = true
-text = "Legends spoke of a distant realm—‘Hope World’—where the Seed of Eternal Energy sleeps.
-"
+text = "The sun has burned for ages without asking"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -99,7 +100,7 @@ custom_minimum_size = Vector2(500, 20)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("2_cjfxa")
 bbcode_enabled = true
-text = "A power strong enough to heal the planet… or destroy it.
+text = "The wind has traveled paths no one owns.
 "
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -109,8 +110,7 @@ custom_minimum_size = Vector2(500, 20)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("2_cjfxa")
 bbcode_enabled = true
-text = "But Hope World is no paradise.
-"
+text = "Rivers carried power long before machines."
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -119,8 +119,7 @@ custom_minimum_size = Vector2(500, 20)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("2_cjfxa")
 bbcode_enabled = true
-text = "Every path is a trial. Every step, a danger. And every seeker who dared to enter… never returned.
-"
+text = "The world was always giving—freely."
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -143,8 +142,7 @@ custom_minimum_size = Vector2(500, 20)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("2_cjfxa")
 bbcode_enabled = true
-text = "Now, in humanity’s final hour… one traveler rises.
-"
+text = "The Seed was only a symbol."
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -153,8 +151,7 @@ custom_minimum_size = Vector2(500, 20)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("2_cjfxa")
 bbcode_enabled = true
-text = "Driven not by fame, nor reward… but by the last spark of courage left in this dying world.
-"
+text = "A reminder of what already exists."
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -163,8 +160,7 @@ custom_minimum_size = Vector2(500, 20)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("2_cjfxa")
 bbcode_enabled = true
-text = "Your journey begins at the edge of despair…
-"
+text = "Power is not meant to be taken alone."
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -173,8 +169,7 @@ custom_minimum_size = Vector2(500, 20)
 layout_mode = 2
 theme_override_fonts/normal_font = ExtResource("2_cjfxa")
 bbcode_enabled = true
-text = "…and ends where hope is reborn.
-"
+text = "It must be shared, protected, and sustained."
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -202,10 +197,19 @@ scale_amount_min = 4.0
 scale_amount_max = 4.0
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("3_mpff0")
+stream = ExtResource("3_koqif")
 volume_db = 10.874
 
 [node name="Start" type="Timer" parent="."]
 one_shot = true
+
+[node name="FadeIn" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="ColorRect" type="ColorRect" parent="FadeIn"]
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(29.181911, 16.565222)
+color = Color(0, 0, 0, 1)
 
 [connection signal="timeout" from="Start" to="." method="_on_start_timeout"]
