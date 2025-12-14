@@ -59,10 +59,12 @@ func _process(delta):
 				Global.give_powerup('dash')
 				await dialog.enqueue("Congratulation!! You Found Dash Ability Orb. [Q] for Dash")
 				special = ''
+				Global.dash_collected = true
 			elif special == 'heal':
 				Global.give_powerup('heal')
 				await dialog.enqueue("Congratulation!! You Found Heal Ability Orb. Collect Energy to Heal 20% of Your Health")
 				special = ''
+				Global.heal_collected = true
 			elif special == 'stun':
 				Global.give_powerup('stun')
 				await dialog.enqueue("Congratulation!! You Found Stun Ability Orb. Hitting Enimies Stun them fo 0.5 second")
@@ -71,6 +73,7 @@ func _process(delta):
 				Global.give_powerup('knockback')	
 				await dialog.enqueue("Congratulation!! You Found Knockback Ability Orb. Hitting Enimies Knocks them Backwards")
 				special = ''
+				Global.knockback_collected = true
 			elif special == 'lifesteal':
 				Global.give_powerup('lifesteal')	
 				await dialog.enqueue("Congratulation!! You Found Lifesteal Ability Orb. Hitting Enimies Recovers 10HP!!")

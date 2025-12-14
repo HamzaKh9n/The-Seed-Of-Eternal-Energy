@@ -19,6 +19,8 @@ func _ready() -> void:
 	Engine.time_scale = 1.2
 	fade_rect.modulate.a = 1.0
 	fade_in()
+	Global.reset()
+	SaveGame.load_game()
 	if Global.just_reloaded:
 		input_paused = false
 		Global.stop = false

@@ -29,6 +29,8 @@ func _ready() -> void:
 	#Engine.time_scale = 1.4
 	fade_rect.modulate.a = 1.0
 	fade_in()
+	Global.reset()
+	SaveGame.load_game()
 	await $DialogBox.enqueue("Welcome to Level 3!!")
 	if Global.just_reloaded:
 		input_paused = false
