@@ -14,8 +14,6 @@ func _ready() -> void:
 	Global.unlock_input()
 	Global.stop = false
 	Global.upgrades = SaveGame.data.upgrades
-	Global.max_frags = 25
-	Global.frags = 10
 	Global.health = 100
 	Global.deaths = 0
 	Global.Level = 2
@@ -28,6 +26,8 @@ func _ready() -> void:
 	fade_in()
 	Global.reset()
 	SaveGame.load_game()
+	Global.max_frags = 25
+	Global.frags = 10
 	await $DialogBox.enqueue("Welcome to Level 2!!")
 	if Global.just_reloaded:
 		input_paused = false

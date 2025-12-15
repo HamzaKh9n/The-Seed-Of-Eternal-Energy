@@ -618,7 +618,7 @@ position = Vector2(9970, -343)
 scale = Vector2(1.7075473, 1.7075473)
 
 [node name="EnergyFragment6" parent="." instance=ExtResource("8_5yfph")]
-position = Vector2(8662, 3759.9998)
+position = Vector2(8946, 3746.9998)
 scale = Vector2(1.7075473, 1.7075473)
 
 [node name="EnergyFragment7" parent="." instance=ExtResource("8_5yfph")]
@@ -648,6 +648,30 @@ scale = Vector2(1.7075473, 1.7075473)
 
 [node name="EnergyFragment13" parent="." instance=ExtResource("8_5yfph")]
 position = Vector2(8799, -2718)
+scale = Vector2(1.7075473, 1.7075473)
+
+[node name="EnergyFragment16" parent="." instance=ExtResource("8_5yfph")]
+position = Vector2(5090, 4027)
+scale = Vector2(1.7075473, 1.7075473)
+
+[node name="EnergyFragment17" parent="." instance=ExtResource("8_5yfph")]
+position = Vector2(3666, 3754)
+scale = Vector2(1.7075473, 1.7075473)
+
+[node name="EnergyFragment18" parent="." instance=ExtResource("8_5yfph")]
+position = Vector2(2315, 3434.9998)
+scale = Vector2(1.7075473, 1.7075473)
+
+[node name="EnergyFragment19" parent="." instance=ExtResource("8_5yfph")]
+position = Vector2(1022, 3202)
+scale = Vector2(1.7075473, 1.7075473)
+
+[node name="EnergyFragment20" parent="." instance=ExtResource("8_5yfph")]
+position = Vector2(7725, 4022.0002)
+scale = Vector2(1.7075473, 1.7075473)
+
+[node name="EnergyFragment21" parent="." instance=ExtResource("8_5yfph")]
+position = Vector2(10478, 3216)
 scale = Vector2(1.7075473, 1.7075473)
 
 [node name="EnergyFragment14" parent="." instance=ExtResource("8_5yfph")]
@@ -700,7 +724,7 @@ position = Vector2(9686, -362)
 position = Vector2(6356, -1952)
 
 [node name="s1_skull8" parent="." instance=ExtResource("6_4pbjs")]
-position = Vector2(2956, 1013)
+position = Vector2(3408, 922)
 
 [node name="s1_skull10" parent="." instance=ExtResource("6_4pbjs")]
 position = Vector2(8273, 2014)

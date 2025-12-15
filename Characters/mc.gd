@@ -65,7 +65,8 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
-	
+	if Global.health>100:
+		Global.health=100
 	var applied_gravity := false
 	#print("Is Hurt " , is_hurt)
 	if Global.stop:
